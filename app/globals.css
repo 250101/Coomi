@@ -1,0 +1,446 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode colors */
+    --background: 40 30% 96%;
+    --background-dark: 40 20% 92%;
+    --foreground: 220 20% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+
+    --primary: 20 90% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 80% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 160 60% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 10% 40%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 40 20% 85%;
+    --input: 40 20% 85%;
+    --ring: 20 90% 50%;
+
+    --radius: 0.5rem;
+
+    --font-montserrat: "Montserrat", sans-serif;
+    --font-playfair: "Playfair Display", serif;
+    --font-bebas: "Bebas Neue", sans-serif;
+    --font-satisfy: "Satisfy", cursive;
+  }
+
+  .dark {
+    /* Dark mode colors */
+    --background: 220 30% 10%;
+    --background-dark: 220 40% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 25% 15%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 25% 15%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 20 90% 50%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 200 80% 45%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 160 60% 40%;
+    --accent-foreground: 0 0% 98%;
+
+    --muted: 220 20% 20%;
+    --muted-foreground: 0 0% 70%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 20 90% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-montserrat;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-playfair;
+  }
+}
+
+@layer components {
+  .font-artistic {
+    @apply font-satisfy;
+  }
+
+  .font-display {
+    @apply font-bebas tracking-wider;
+  }
+
+  /* Background */
+  .cosmic-background {
+    @apply fixed top-0 left-0 w-full h-full z-0 opacity-20;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    animation: cosmic-drift 120s linear infinite;
+  }
+
+  @keyframes cosmic-drift {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+  /* Initial page load glitch effect */
+  .initial-glitch {
+    animation: initial-page-glitch 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes initial-page-glitch {
+    0% {
+      transform: translate(0);
+      filter: hue-rotate(0deg);
+    }
+    10% {
+      transform: translate(-10px, 5px);
+      filter: hue-rotate(90deg) saturate(1.5);
+    }
+    20% {
+      transform: translate(10px, -5px);
+      filter: invert(0.1);
+    }
+    30% {
+      transform: translate(0);
+      filter: none;
+    }
+    40% {
+      transform: skewX(5deg);
+      filter: saturate(1.5);
+    }
+    50% {
+      transform: skewX(-5deg);
+      filter: hue-rotate(180deg);
+    }
+    60% {
+      transform: translate(0);
+      filter: none;
+    }
+    70% {
+      transform: translate(8px, -8px);
+      filter: brightness(1.2);
+    }
+    80% {
+      transform: translate(-8px, 8px);
+      filter: contrast(1.2);
+    }
+    90% {
+      transform: skewY(5deg);
+      filter: invert(0.05);
+    }
+    100% {
+      transform: translate(0);
+      filter: none;
+    }
+  }
+
+  /* Recipe cards and images */
+  .glitch-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glitch-image {
+    position: relative;
+    transition: all 0.3s ease;
+    /* Adjusted to ensure dishes are centered and visible */
+    background-size: cover !important;
+    background-position: center center !important;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Modal glitch effect */
+  .modal-content {
+    @apply bg-card rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto relative;
+    animation: modal-glitch 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes modal-glitch {
+    0% {
+      transform: scale(0.9) translate(0) skew(0deg);
+      filter: hue-rotate(0deg);
+    }
+    25% {
+      transform: scale(0.95) translate(-10px, 5px) skew(2deg);
+      filter: hue-rotate(45deg) saturate(1.2);
+    }
+    50% {
+      transform: scale(1.05) translate(10px, -5px) skew(-2deg);
+      filter: hue-rotate(90deg) brightness(1.1);
+    }
+    75% {
+      transform: scale(0.97) translate(5px, 5px) skew(1deg);
+      filter: hue-rotate(180deg) contrast(1.1);
+    }
+    100% {
+      transform: scale(1) translate(0) skew(0deg);
+      filter: hue-rotate(0deg);
+    }
+  }
+
+  .recipe-card {
+    @apply bg-card rounded-lg overflow-hidden shadow-lg transition-all duration-500 h-full flex flex-col relative transform hover:-translate-y-2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .recipe-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--secondary)));
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+  }
+
+  .recipe-card:hover::before {
+    opacity: 0.1;
+  }
+
+  .recipe-image {
+    @apply h-64 w-full relative;
+  }
+
+  .recipe-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+  }
+
+  .recipe-content {
+    @apply p-6 flex-grow flex flex-col;
+  }
+
+  .recipe-title {
+    @apply text-2xl mb-3 font-display;
+  }
+
+  .recipe-description {
+    @apply text-muted-foreground mb-4 flex-grow;
+  }
+
+  .recipe-meta {
+    @apply flex gap-4 text-sm text-muted-foreground mb-4;
+  }
+
+  .recipe-footer {
+    @apply mt-auto flex justify-between items-center;
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+  }
+
+  .modal-header {
+    @apply p-6 border-b border-border relative;
+  }
+
+  .modal-body {
+    @apply p-6;
+  }
+
+  .modal-tabs {
+    @apply flex border-b border-border;
+  }
+
+  .modal-tab {
+    @apply px-6 py-4 font-medium relative cursor-pointer transition-colors;
+  }
+
+  .modal-tab.active {
+    @apply text-primary;
+  }
+
+  .modal-tab.active::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary;
+  }
+
+  .modal-tab-content {
+    @apply hidden;
+  }
+
+  .modal-tab-content.active {
+    @apply block;
+  }
+
+  .recipe-detail-image {
+    @apply w-full h-96 object-cover rounded-lg mb-8;
+    object-position: center; /* Ensure food is centered */
+  }
+
+  .recipe-detail-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+  }
+
+  .ingredients-list {
+    @apply md:col-span-1;
+  }
+
+  .steps-list {
+    @apply md:col-span-2;
+  }
+
+  .ingredient-item {
+    @apply py-2 border-b border-border flex justify-between;
+  }
+
+  .step-item {
+    @apply mb-6 relative pl-10;
+  }
+
+  .step-item::before {
+    content: counter(step-counter);
+    counter-increment: step-counter;
+    @apply absolute left-0 top-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold;
+  }
+
+  .search-container {
+    @apply max-w-3xl mx-auto;
+  }
+
+  .search-input-container {
+    @apply relative mb-8;
+  }
+
+  .search-input {
+    @apply w-full p-4 pl-6 pr-12 bg-card border border-border rounded-full text-lg;
+  }
+
+  .search-icon {
+    @apply absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xl;
+  }
+
+  .search-suggestions {
+    @apply absolute top-full left-0 w-full bg-card border border-border border-t-0 rounded-b-lg max-h-60 overflow-y-auto z-10 hidden;
+  }
+
+  .search-suggestion-item {
+    @apply p-3 cursor-pointer hover:bg-muted transition-colors;
+  }
+
+  .selected-ingredients {
+    @apply flex flex-wrap gap-2 mb-8;
+  }
+
+  .ingredient-tag {
+    @apply bg-primary text-white px-4 py-2 rounded-full flex items-center gap-2 transition-transform hover:scale-105;
+  }
+
+  .vegetarian-section {
+    @apply py-24 relative overflow-hidden my-24;
+  }
+
+  .vegetarian-section::before {
+    content: "";
+    @apply absolute inset-0 bg-muted opacity-50 z-0;
+  }
+
+  .vegetarian-content {
+    @apply relative z-10 max-w-3xl mx-auto text-center;
+  }
+
+  .vegetarian-steps {
+    @apply bg-card p-8 rounded-lg mt-12 text-left shadow-lg;
+  }
+
+  .tips-section {
+    @apply py-24;
+  }
+
+  .tips-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+  }
+
+  .tip-card {
+    @apply bg-card rounded-lg overflow-hidden shadow-lg transition-all duration-500 h-full flex flex-col hover:-translate-y-2;
+  }
+
+  .tip-header {
+    @apply bg-primary p-6;
+  }
+
+  .tip-title {
+    @apply text-xl font-display text-white;
+  }
+
+  .tip-content {
+    @apply p-6 flex-grow;
+  }
+
+  /* Pairing recommendations */
+  .pairing-section {
+    @apply mt-8 p-6 bg-muted rounded-lg;
+  }
+
+  .pairing-title {
+    @apply text-xl font-display mb-4;
+  }
+
+  .pairing-list {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .pairing-item {
+    @apply flex items-center gap-3 p-3 bg-card rounded-md transition-all hover:shadow-md;
+  }
+
+  .pairing-icon {
+    @apply text-primary;
+  }
+
+  .theme-toggle-btn {
+    @apply p-2 rounded-full transition-colors;
+  }
+
+  .theme-toggle-btn.light {
+    @apply bg-amber-100 text-amber-600;
+  }
+
+  .theme-toggle-btn.dark {
+    @apply bg-indigo-900 text-indigo-200;
+  }
+}
+
