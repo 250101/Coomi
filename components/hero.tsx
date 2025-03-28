@@ -3,10 +3,17 @@
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Hero() {
+  // Reference to the hero section element for mouse tracking
   const heroRef = useRef<HTMLDivElement>(null)
 
+  // Get translation function from language context
+  const { t } = useLanguage()
+
+  // Add mouse move event listener to create interactive background effect
+  // This creates a dynamic gradient that follows the mouse cursor
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!heroRef.current) return
@@ -14,9 +21,11 @@ export default function Hero() {
       const { clientX, clientY } = e
       const { width, height, left, top } = heroRef.current.getBoundingClientRect()
 
+      // Calculate mouse position as percentage of element dimensions
       const x = (clientX - left) / width
       const y = (clientY - top) / height
 
+      // Set CSS variables for the gradient effect
       heroRef.current.style.setProperty("--mouse-x", `${x}`)
       heroRef.current.style.setProperty("--mouse-y", `${y}`)
     }
@@ -25,6 +34,7 @@ export default function Hero() {
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
+  // Scroll to content section when button is clicked
   const scrollToContent = () => {
     const contentSection = document.getElementById("browse")
     if (contentSection) {
@@ -61,7 +71,7 @@ export default function Hero() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Cominegros
+            {t("heroTitle")}
           </motion.h1>
 
           <motion.p
@@ -70,7 +80,7 @@ export default function Hero() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            ¿Qué comé Negro?
+            {t("heroSubtitle")}
           </motion.p>
 
           <motion.p
@@ -79,8 +89,7 @@ export default function Hero() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            Una colección de recetas caseras, probadas y aprobadas. Ajusta cantidades y encuentra recetas con los
-            ingredientes que tenés en casa.
+            {t("heroDescription")}
           </motion.p>
 
           <motion.button
@@ -92,11 +101,12 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.8 }}
             onClick={scrollToContent}
           >
-            Explorar Recetas
+            {t("heroButton")}
           </motion.button>
         </motion.div>
       </div>
 
+      {/* Animated down arrow to guide users to scroll down */}
       <motion.div
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
         animate={{ y: [0, 10, 0] }}

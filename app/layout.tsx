@@ -4,8 +4,9 @@ import { Montserrat, Playfair_Display } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { LanguageProvider } from "@/contexts/language-context"
 
-// Configurar fuentes con next/font
+// Configure fonts with next/font
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
@@ -18,7 +19,7 @@ const playfair = Playfair_Display({
   display: "swap",
 })
 
-// Cargar fuentes que no están disponibles en Google Fonts como fuentes locales
+// Load fonts that aren't available in Google Fonts as local fonts
 const bebas = localFont({
   src: "../public/fonts/BebasNeue-Regular.woff2",
   variable: "--font-bebas",
@@ -32,9 +33,9 @@ const satisfy = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "Cominegros - ¿Qué comé Negro?",
+  title: "Coomi - ¿Qué como, Ne?",
   description: "Una colección de recetas caseras, probadas y aprobadas.",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -47,13 +48,18 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${playfair.variable} ${bebas.variable} ${satisfy.variable} font-montserrat`}
       >
+        {/* Wrap the app with both ThemeProvider and LanguageProvider */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          {children}
+          <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
   )
 }
+
+import "./globals.css"
+
+import "./globals.css"
 
 
 

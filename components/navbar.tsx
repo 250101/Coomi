@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Menu, X, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useLanguage } from "@/contexts/language-context"
+import LanguageSwitcher from "@/components/language-switcher"
 
 interface NavbarProps {
   activeSection: string
@@ -11,16 +13,25 @@ interface NavbarProps {
 }
 
 export default function Navbar({ activeSection, setActiveSection }: NavbarProps) {
+  // State for tracking scroll position and mobile menu visibility
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Theme hooks for dark/light mode
   const { theme, setTheme } = useTheme()
+
+  // Track if component is mounted to avoid hydration issues
   const [mounted, setMounted] = useState(false)
+
+  // Get translation function from language context
+  const { t, language, setLanguage } = useLanguage()
 
   // After mounting, we can safely show the theme toggle
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  // Add scroll event listener to change navbar appearance on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -34,6 +45,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Scroll to section and close mobile menu
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId)
     if (section) {
@@ -42,9 +54,8 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
     setMobileMenuOpen(false)
   }
 
-  // Fix: Ensure theme toggle works correctly
+  // Toggle between light and dark theme
   const toggleTheme = () => {
-    // Fix: Explicitly set the theme to avoid any issues with theme detection
     setTheme(theme === "dark" ? "light" : "dark")
   }
 
@@ -65,7 +76,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Cominegros
+            Coomi
           </motion.a>
 
           <div className="hidden md:flex items-center gap-8">
@@ -80,7 +91,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Explorar
+              {t("explore")}
               {activeSection === "browse" && (
                 <motion.span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" layoutId="navbar-underline" />
               )}
@@ -96,7 +107,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Buscar
+              {t("search")}
               {activeSection === "search" && (
                 <motion.span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" layoutId="navbar-underline" />
               )}
@@ -111,7 +122,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Vegetariano
+              {t("vegetarian")}
             </motion.a>
             <motion.a
               href="#tips"
@@ -123,7 +134,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Tips
+              {t("tips")}
             </motion.a>
             <motion.a
               href="#forum"
@@ -135,10 +146,25 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Foro
+              {t("forum")}
+            </motion.a>
+            <motion.a
+              href="#about"
+              className="relative px-1 py-2"
+              onClick={(e) => {
+                e.preventDefault()
+                scrollToSection("about")
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t("about")}
             </motion.a>
 
-            {/* Fix: Only render theme toggle when mounted to avoid hydration mismatch */}
+            {/* Language switcher */}
+            <LanguageSwitcher />
+
+            {/* Theme toggle - only render when mounted to avoid hydration mismatch */}
             {mounted && (
               <motion.button
                 onClick={toggleTheme}
@@ -172,7 +198,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       >
         <div className="container mx-auto px-4 py-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-10">
-            <span className="text-3xl font-artistic text-primary">Cominegros</span>
+            <span className="text-3xl font-artistic text-primary">Coomi</span>
             <motion.button
               onClick={() => setMobileMenuOpen(false)}
               whileHover={{ scale: 1.1 }}
@@ -195,7 +221,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               }}
               whileHover={{ x: 10 }}
             >
-              Explorar Recetas
+              {t("exploreRecipes")}
             </motion.a>
             <motion.a
               href="#search"
@@ -209,7 +235,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               }}
               whileHover={{ x: 10 }}
             >
-              Buscar por Ingredientes
+              {t("searchByIngredients")}
             </motion.a>
             <motion.a
               href="#vegetarian"
@@ -220,7 +246,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               }}
               whileHover={{ x: 10 }}
             >
-              Vegetariano
+              {t("vegetarian")}
             </motion.a>
             <motion.a
               href="#tips"
@@ -231,7 +257,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               }}
               whileHover={{ x: 10 }}
             >
-              Tips
+              {t("tips")}
             </motion.a>
             <motion.a
               href="#forum"
@@ -242,8 +268,38 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               }}
               whileHover={{ x: 10 }}
             >
-              Foro
+              {t("forum")}
             </motion.a>
+            <motion.a
+              href="#about"
+              className="py-2 border-b border-border"
+              onClick={(e) => {
+                e.preventDefault()
+                scrollToSection("about")
+              }}
+              whileHover={{ x: 10 }}
+            >
+              {t("aboutProject")}
+            </motion.a>
+
+            {/* Language options in mobile menu */}
+            <div className="py-2 border-b border-border">
+              <p className="text-muted-foreground text-sm mb-2">{t("language")}</p>
+              <div className="flex gap-4">
+                <button
+                  className={`px-3 py-1 rounded ${language === "es" ? "bg-primary text-white" : "bg-background"}`}
+                  onClick={() => setLanguage("es")}
+                >
+                  {t("spanish")}
+                </button>
+                <button
+                  className={`px-3 py-1 rounded ${language === "en" ? "bg-primary text-white" : "bg-background"}`}
+                  onClick={() => setLanguage("en")}
+                >
+                  {t("english")}
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="mt-auto flex justify-center">

@@ -5,8 +5,9 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Send, Trash2, MessageSquare, User } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
-// Define the comment type
+// Define the comment type structure
 interface Comment {
   id: string
   author: string
@@ -16,19 +17,23 @@ interface Comment {
 }
 
 export default function ForumSection() {
-  // State for comments
+  // State for managing comments
   const [comments, setComments] = useState<Comment[]>([])
+  // State for the new comment form
   const [newComment, setNewComment] = useState("")
   const [authorName, setAuthorName] = useState("")
   const [selectedRecipe, setSelectedRecipe] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Load comments from localStorage on mount
+  // Get translation function from language context
+  const { t } = useLanguage()
+
+  // Load comments from localStorage on component mount
   useEffect(() => {
     const savedComments = localStorage.getItem("forumComments")
     if (savedComments) {
       try {
-        // Parse the dates properly
+        // Parse the dates properly from JSON string to Date objects
         const parsed = JSON.parse(savedComments)
         const commentsWithDates = parsed.map((comment: any) => ({
           ...comment,
@@ -41,29 +46,30 @@ export default function ForumSection() {
     }
   }, [])
 
-  // Save comments to localStorage when they change
+  // Save comments to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("forumComments", JSON.stringify(comments))
   }, [comments])
 
-  // Handle form submission
+  // Handle form submission for new comments
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Validate required fields
     if (!newComment.trim() || !authorName.trim()) return
 
     setIsSubmitting(true)
 
-    // Create new comment
+    // Create new comment object
     const comment: Comment = {
-      id: Date.now().toString(),
+      id: Date.now().toString(), // Use timestamp as unique ID
       author: authorName,
       content: newComment,
       date: new Date(),
       recipe: selectedRecipe || undefined,
     }
 
-    // Add comment to state
+    // Add comment to state (at the beginning of the array to show newest first)
     setComments((prev) => [comment, ...prev])
 
     // Reset form
@@ -71,12 +77,12 @@ export default function ForumSection() {
     setIsSubmitting(false)
   }
 
-  // Delete a comment
+  // Delete a comment by ID
   const deleteComment = (id: string) => {
     setComments((prev) => prev.filter((comment) => comment.id !== id))
   }
 
-  // Format date for display
+  // Format date for display using locale-specific formatting
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("es-AR", {
       year: "numeric",
@@ -87,9 +93,9 @@ export default function ForumSection() {
     }).format(date)
   }
 
-  // List of recipes for the dropdown
+  // List of recipes for the dropdown selection
   const recipeOptions = [
-    { value: "", label: "General (sin receta específica)" },
+    { value: "", label: t("general") },
     { value: "crema-boniato", label: "Crema de Boniato" },
     { value: "manteca-miso", label: "Manteca Miso" },
     { value: "crema-champinones", label: "Crema de Champiñones y Cebolla" },
@@ -124,7 +130,7 @@ export default function ForumSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              Foro de Recetas
+              {t("recipesForum")}
               <motion.span
                 className="absolute -bottom-2 left-0 h-1 bg-primary"
                 initial={{ width: 0 }}
@@ -136,22 +142,19 @@ export default function ForumSection() {
             <div className="ml-6 h-px bg-border flex-grow"></div>
           </div>
 
-          <p className="text-muted-foreground mb-8">
-            Comparte tus consejos, variaciones o preguntas sobre nuestras recetas. ¡La comunidad de Cominegros está aquí
-            para ayudarte!
-          </p>
+          <p className="text-muted-foreground mb-8">{t("forumDescription")}</p>
 
           {/* Comment form */}
           <div className="bg-card rounded-lg p-6 mb-10 shadow-md">
             <h3 className="text-xl font-display mb-4 flex items-center gap-2">
               <MessageSquare size={20} className="text-primary" />
-              Deja tu comentario
+              {t("leaveComment")}
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="author" className="block text-sm font-medium mb-1">
-                  Tu nombre
+                  {t("yourName")}
                 </label>
                 <input
                   type="text"
@@ -159,14 +162,14 @@ export default function ForumSection() {
                   value={authorName}
                   onChange={(e) => setAuthorName(e.target.value)}
                   className="w-full p-3 bg-background border border-border rounded-md"
-                  placeholder="Escribe tu nombre"
+                  placeholder={t("yourName")}
                   required
                 />
               </div>
 
               <div>
                 <label htmlFor="recipe" className="block text-sm font-medium mb-1">
-                  Receta (opcional)
+                  {t("recipe_optional")}
                 </label>
                 <select
                   id="recipe"
@@ -184,14 +187,14 @@ export default function ForumSection() {
 
               <div>
                 <label htmlFor="comment" className="block text-sm font-medium mb-1">
-                  Tu comentario
+                  {t("yourComment")}
                 </label>
                 <textarea
                   id="comment"
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   className="w-full p-3 bg-background border border-border rounded-md min-h-[120px]"
-                  placeholder="Comparte tu experiencia, consejos o preguntas..."
+                  placeholder={t("commentPlaceholder")}
                   required
                 />
               </div>
@@ -205,7 +208,7 @@ export default function ForumSection() {
                   disabled={isSubmitting}
                 >
                   <Send size={16} />
-                  Publicar comentario
+                  {t("postComment")}
                 </motion.button>
               </div>
             </form>
@@ -214,9 +217,7 @@ export default function ForumSection() {
           {/* Comments list */}
           <div className="space-y-6">
             <h3 className="text-xl font-display mb-6">
-              {comments.length > 0
-                ? `Comentarios (${comments.length})`
-                : "No hay comentarios aún. ¡Sé el primero en comentar!"}
+              {comments.length > 0 ? t("comments").replace("{count}", comments.length.toString()) : t("noComments")}
             </h3>
 
             {comments.map((comment) => {

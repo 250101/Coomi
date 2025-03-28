@@ -1,25 +1,38 @@
 "use client"
+
 import { motion } from "framer-motion"
 import type { Recipe } from "@/data/recipes"
+import { useLanguage } from "@/contexts/language-context"
 
 interface RecipeGalleryProps {
   recipes: Recipe[]
   openRecipeModal: (recipe: Recipe) => void
 }
 
+/**
+ * RecipeGallery component displays all recipes organized by categories
+ * It renders a grid of recipe cards for each category
+ */
 export default function RecipeGallery({ recipes, openRecipeModal }: RecipeGalleryProps) {
+  // Get translation function from language context
+  const { t } = useLanguage()
+
+  // Define categories for organizing recipes
+  // Each category has an id that matches the categoryId in recipe data
   const categories = [
-    { id: "salsas", name: "Salsas y Cremas" },
-    { id: "entradas", name: "Entradas" },
-    { id: "principales", name: "Platos Principales" },
-    { id: "postres", name: "Postres" },
+    { id: "salsas", name: t("saucesCream") },
+    { id: "entradas", name: t("starters") },
+    { id: "principales", name: t("mainDishes") },
+    { id: "postres", name: t("desserts") },
   ]
 
   return (
     <div>
       {categories.map((category) => {
+        // Filter recipes by category to display only recipes in the current category
         const categoryRecipes = recipes.filter((recipe) => recipe.categoryId === category.id)
 
+        // Skip rendering empty categories
         if (categoryRecipes.length === 0) return null
 
         return (
@@ -33,6 +46,7 @@ export default function RecipeGallery({ recipes, openRecipeModal }: RecipeGaller
                 transition={{ duration: 0.5 }}
               >
                 {category.name}
+                {/* Animated underline for category heading */}
                 <motion.span
                   className="absolute -bottom-2 left-0 h-1 bg-primary"
                   initial={{ width: 0 }}
@@ -44,6 +58,7 @@ export default function RecipeGallery({ recipes, openRecipeModal }: RecipeGaller
               <div className="ml-6 h-px bg-border flex-grow"></div>
             </div>
 
+            {/* Grid layout for recipe cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {categoryRecipes.map((recipe, index) => (
                 <motion.div
@@ -69,27 +84,40 @@ interface RecipeCardProps {
   openRecipeModal: (recipe: Recipe) => void
 }
 
+/**
+ * RecipeCard component displays a single recipe card
+ * It shows the recipe image, title, metadata, and description
+ */
 function RecipeCard({ recipe, openRecipeModal }: RecipeCardProps) {
-  // Fix: Removed unnecessary state that could cause rendering issues
+  // Get translation function from language context
+  const { t } = useLanguage()
+
+  // Simplificar el manejador de clics para evitar problemas
+  const handleCardClick = () => {
+    openRecipeModal(recipe)
+  }
+
   return (
     <div
       className="recipe-card cursor-pointer"
-      onClick={() => {
-        // Fix: Ensure we're calling the function properly
-        openRecipeModal(recipe)
-      }}
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`View recipe for ${recipe.name}`}
     >
       <div className="glitch-container">
+        {/* Recipe image with glitch effect */}
         <div
           className="recipe-image glitch-image"
           style={{
             backgroundImage: `url(${recipe.image})`,
             backgroundSize: "cover",
-            backgroundPosition: "center 40%", // Adjusted to better show the food
+            backgroundPosition: "center 40%",
             height: "264px",
           }}
         />
 
+        {/* Recipe tags displayed as badges */}
         {recipe.tags && recipe.tags.length > 0 && (
           <div className="absolute top-4 right-4 z-10 flex flex-wrap gap-2 justify-end">
             {recipe.tags.map((tag, index) => (
@@ -104,6 +132,7 @@ function RecipeCard({ recipe, openRecipeModal }: RecipeCardProps) {
       <div className="recipe-content">
         <h3 className="recipe-title">{recipe.name}</h3>
 
+        {/* Recipe metadata (time and servings) */}
         <div className="recipe-meta">
           <div className="flex items-center gap-1.5">
             <span className="text-primary">⏱️</span>
@@ -120,13 +149,13 @@ function RecipeCard({ recipe, openRecipeModal }: RecipeCardProps) {
         <p className="recipe-description">{recipe.description}</p>
 
         <div className="recipe-footer">
-          <motion.button
+          <button
             className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/80 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            onClick={handleCardClick}
+            aria-label={`View recipe for ${recipe.name}`}
           >
-            Ver Receta
-          </motion.button>
+            {t("viewRecipe")}
+          </button>
         </div>
       </div>
     </div>

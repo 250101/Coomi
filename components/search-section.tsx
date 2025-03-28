@@ -1,59 +1,88 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import { Search, X } from "lucide-react"
 import type { Recipe } from "@/data/recipes"
+import { useLanguage } from "@/contexts/language-context"
 
 interface SearchSectionProps {
   recipes: Recipe[]
   openRecipeModal: (recipe: Recipe) => void
 }
 
+/**
+ * SearchSection component allows users to search for recipes by ingredients
+ * It displays a search input, ingredient tags, and search results
+ */
 export default function SearchSection({ recipes, openRecipeModal }: SearchSectionProps) {
+  // State for the current search input value
   const [searchTerm, setSearchTerm] = useState("")
+  // State for controlling the visibility of ingredient suggestions dropdown
   const [suggestions, setShowSuggestions] = useState(false)
+  // State for tracking selected ingredients for search
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([])
+  // State for storing search results
   const [searchResults, setSearchResults] = useState<Recipe[]>([])
+  // State to track if a search has been performed
   const [hasSearched, setHasSearched] = useState(false)
 
-  // Extraer todos los ingredientes únicos
+  // Get translation function from language context
+  const { t } = useLanguage()
+
+  // Extract all unique ingredients from recipes and sort them alphabetically
+  // This creates a master list of all available ingredients for suggestions
   const allIngredients = Array.from(
     new Set(recipes.flatMap((recipe) => recipe.ingredients.map((ingredient) => ingredient.name.toLowerCase()))),
   ).sort()
 
-  // Filtrar ingredientes basados en el término de búsqueda
+  // Filter ingredients based on search term and exclude already selected ingredients
   const filteredIngredients = allIngredients.filter(
     (ingredient) => ingredient.includes(searchTerm.toLowerCase()) && !selectedIngredients.includes(ingredient),
   )
 
-  const addIngredient = (ingredient: string) => {
-    if (!selectedIngredients.includes(ingredient)) {
-      setSelectedIngredients([...selectedIngredients, ingredient])
-    }
-    setSearchTerm("")
-    setShowSuggestions(false)
-  }
+  // Add an ingredient to the selected list
+  // Memoized to prevent unnecessary re-renders
+  const addIngredient = useCallback(
+    (ingredient: string) => {
+      if (!selectedIngredients.includes(ingredient)) {
+        setSelectedIngredients((prev) => [...prev, ingredient])
+      }
+      setSearchTerm("")
+      setShowSuggestions(false)
+    },
+    [selectedIngredients],
+  )
 
-  const removeIngredient = (ingredient: string) => {
-    setSelectedIngredients(selectedIngredients.filter((i) => i !== ingredient))
-  }
+  // Remove an ingredient from the selected list
+  const removeIngredient = useCallback((ingredient: string) => {
+    setSelectedIngredients((prev) => prev.filter((i) => i !== ingredient))
+  }, [])
 
-  const searchRecipes = () => {
+  // Search for recipes containing the selected ingredients
+  // This function filters recipes that contain at least one of the selected ingredients
+  const searchRecipes = useCallback(() => {
     if (selectedIngredients.length === 0) return
 
     const results = recipes.filter((recipe) => {
       const recipeIngredients = recipe.ingredients.map((i) => i.name.toLowerCase())
-
-      // Verificar si alguno de los ingredientes seleccionados está en la receta
       return selectedIngredients.some((ingredient) => recipeIngredients.includes(ingredient))
     })
 
     setSearchResults(results)
     setHasSearched(true)
-  }
+  }, [recipes, selectedIngredients])
 
-  // Cerrar sugerencias al hacer clic fuera
+  // Simplificar el manejo de clics en los resultados de búsqueda
+  const handleRecipeClick = useCallback(
+    (recipe: Recipe) => {
+      console.log("Search result clicked:", recipe.name)
+      openRecipeModal(recipe)
+    },
+    [openRecipeModal],
+  )
+
+  // Close suggestions dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement
@@ -74,7 +103,7 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Buscar por Ingredientes
+        {t("searchTitle")}
       </motion.h2>
 
       <motion.p
@@ -83,9 +112,10 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        Selecciona los ingredientes que tenés en casa y te mostraremos recetas que podés preparar.
+        {t("searchDescription")}
       </motion.p>
 
+      {/* Search input with suggestions dropdown */}
       <motion.div
         className="search-input-container"
         initial={{ opacity: 0, y: 20 }}
@@ -95,10 +125,11 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
         <input
           type="text"
           className="search-input"
-          placeholder="Escribe un ingrediente..."
+          placeholder={t("searchPlaceholder")}
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value)
+            // Show suggestions only if there are at least 2 characters
             if (e.target.value.length >= 2) {
               setShowSuggestions(true)
             } else {
@@ -115,6 +146,7 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
           <Search size={20} />
         </span>
 
+        {/* Suggestions dropdown */}
         {suggestions && filteredIngredients.length > 0 && (
           <div className="search-suggestions" style={{ display: "block" }}>
             {filteredIngredients.slice(0, 8).map((ingredient, index) => (
@@ -126,6 +158,7 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
         )}
       </motion.div>
 
+      {/* Selected ingredients tags */}
       {selectedIngredients.length > 0 && (
         <motion.div
           className="selected-ingredients"
@@ -150,6 +183,7 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
         </motion.div>
       )}
 
+      {/* Search button */}
       <motion.div
         className="flex justify-center mb-16"
         initial={{ opacity: 0, y: 20 }}
@@ -161,16 +195,17 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
           onClick={searchRecipes}
           disabled={selectedIngredients.length === 0}
         >
-          Buscar Recetas
+          {t("searchButton")}
         </button>
       </motion.div>
 
+      {/* Search results section - only shown after a search is performed */}
       {hasSearched && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h3 className="text-2xl font-display text-center mb-8">
             {searchResults.length > 0
-              ? `Encontramos ${searchResults.length} recetas con tus ingredientes`
-              : "No encontramos recetas con esos ingredientes"}
+              ? t("resultsFound").replace("{count}", searchResults.length.toString())
+              : t("noResults")}
           </h3>
 
           {searchResults.length > 0 ? (
@@ -179,10 +214,13 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
                 <motion.div
                   key={recipe.id}
                   className="recipe-card cursor-pointer"
-                  onClick={() => openRecipeModal(recipe)}
+                  onClick={() => handleRecipeClick(recipe)}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View recipe for ${recipe.name}`}
                 >
                   <div className="glitch-container">
                     <div
@@ -200,8 +238,14 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
                     <h3 className="recipe-title">{recipe.name}</h3>
                     <p className="recipe-description">{recipe.description}</p>
                     <div className="recipe-footer">
-                      <button className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/80 transition-colors">
-                        Ver Receta
+                      <button
+                        className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/80 transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleRecipeClick(recipe)
+                        }}
+                      >
+                        {t("viewRecipe")}
                       </button>
                     </div>
                   </div>
@@ -210,12 +254,12 @@ export default function SearchSection({ recipes, openRecipeModal }: SearchSectio
             </div>
           ) : (
             <div className="bg-card p-12 rounded-lg text-center">
-              <p className="text-muted-foreground mb-4">Prueba con otros ingredientes o menos específicos.</p>
+              <p className="text-muted-foreground mb-4">{t("tryOther")}</p>
               <button
                 className="bg-muted text-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-muted/80 transition-colors"
                 onClick={() => setSelectedIngredients([])}
               >
-                Limpiar búsqueda
+                {t("clearSearch")}
               </button>
             </div>
           )}

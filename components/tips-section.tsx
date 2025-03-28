@@ -1,8 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function TipsSection() {
+  // Get translation function from language context
+  const { t } = useLanguage()
+
+  // Array of cooking tips with title and content
   const tips = [
     {
       title: "Freír Correctamente",
@@ -46,9 +51,10 @@ export default function TipsSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Tips de Cocina
+          {t("cookingTips")}
         </motion.h2>
 
+        {/* Grid layout for tips cards */}
         <div className="tips-grid">
           {tips.map((tip, index) => (
             <motion.div

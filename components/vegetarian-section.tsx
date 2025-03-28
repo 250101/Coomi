@@ -1,8 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function VegetarianSection() {
+  // Get translation function from language context
+  const { t } = useLanguage()
+
   return (
     <section className="vegetarian-section" id="vegetarian">
       <motion.div
@@ -19,7 +23,7 @@ export default function VegetarianSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Opciones Vegetarianas
+          {t("vegetarianTitle")}
         </motion.h2>
 
         <motion.p
@@ -29,9 +33,7 @@ export default function VegetarianSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          ¿Buscás alternativas sin carne? Podés reemplazar la carne en muchas de nuestras recetas con opciones
-          vegetarianas. Una de nuestras favoritas es el Katsu de Berenjena Ahumada, que podés usar en lugar de la carne
-          en recetas como el Katsudon o Katsu Curry.
+          {t("vegetarianDescription")}
         </motion.p>
 
         <motion.div
@@ -41,7 +43,7 @@ export default function VegetarianSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <h3 className="text-2xl font-display mb-6">Katsu de Berenjena Ahumada</h3>
+          <h3 className="text-2xl font-display mb-6">{t("eggplantKatsu")}</h3>
           <ol className="space-y-4 mb-8">
             <li className="flex gap-4">
               <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
@@ -89,7 +91,7 @@ export default function VegetarianSection() {
             </li>
           </ol>
 
-          <h3 className="text-2xl font-display mb-4">Opción Sin TACC</h3>
+          <h3 className="text-2xl font-display mb-4">{t("glutenFreeOption")}</h3>
           <p>
             Podés cambiar el panko por panko sin TACC. En este caso, en vez de pasar el producto crudo en la harina,
             pasalo primero por el panko sin TACC, luego por el huevo y por último el panko sin TACC nuevamente.

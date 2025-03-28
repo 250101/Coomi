@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
@@ -12,44 +12,54 @@ import SearchSection from "@/components/search-section"
 import VegetarianSection from "@/components/vegetarian-section"
 import TipsSection from "@/components/tips-section"
 import ForumSection from "@/components/forum-section"
+import AboutSection from "@/components/about-section"
 
 export default function Home() {
+  // State for tracking the currently selected recipe for the modal
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+  // State for tracking which section is currently active (browse or search)
   const [activeSection, setActiveSection] = useState<string>("browse")
+  // State for controlling the visibility of the recipe modal
   const [isModalOpen, setIsModalOpen] = useState(false)
+  // State to track when the initial page load animation is complete
   const [initialGlitchDone, setInitialGlitchDone] = useState(false)
 
-  // Fix: Ensure recipe modal opens correctly
-  const openRecipeModal = (recipe: Recipe) => {
-    // Set the selected recipe first
+  // Modificar la función openRecipeModal para hacerla más robusta
+  const openRecipeModal = useCallback((recipe: Recipe) => {
+    console.log("Opening recipe modal for:", recipe.name)
     setSelectedRecipe(recipe)
-    // Then open the modal
     setIsModalOpen(true)
     // Prevent scrolling when modal is open
     document.body.style.overflow = "hidden"
-  }
+  }, [])
 
-  const closeRecipeModal = () => {
+  // Modificar la función closeRecipeModal para ser más directa
+  const closeRecipeModal = useCallback(() => {
     setIsModalOpen(false)
     document.body.style.overflow = "auto"
-  }
+    // No retrasamos la limpieza del selectedRecipe para evitar problemas
+    setSelectedRecipe(null)
+  }, [])
 
   useEffect(() => {
-    // Initial page load glitch effect
+    // Apply initial glitch effect on page load
     document.body.classList.add("initial-glitch")
 
+    // Remove glitch effect after 1.5 seconds
     const timer = setTimeout(() => {
       document.body.classList.remove("initial-glitch")
       setInitialGlitchDone(true)
     }, 1500)
 
-    // Scroll effect
+    // Set up scroll effect by updating CSS variable based on scroll position
     const handleScroll = () => {
       const scrollY = window.scrollY
       document.documentElement.style.setProperty("--scroll", String(scrollY))
     }
 
     window.addEventListener("scroll", handleScroll)
+
+    // Clean up event listeners and timers on component unmount
     return () => {
       window.removeEventListener("scroll", handleScroll)
       clearTimeout(timer)
@@ -58,7 +68,7 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-background to-background-dark">
-      {/* Fondo abstracto */}
+      {/* Cosmic background effect */}
       <div className="cosmic-background"></div>
 
       <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
@@ -82,6 +92,7 @@ export default function Home() {
             </button>
           </div>
 
+          {/* AnimatePresence enables exit animations when switching between tabs */}
           <AnimatePresence mode="wait">
             {activeSection === "browse" ? (
               <motion.div
@@ -111,12 +122,15 @@ export default function Home() {
 
         <TipsSection />
 
-        {/* Add the new Forum Section */}
         <ForumSection />
+
+        {/* About Section */}
+        <AboutSection />
       </div>
 
       <Footer />
 
+      {/* Modal for recipe details - only rendered when a recipe is selected */}
       <AnimatePresence>
         {isModalOpen && selectedRecipe && <RecipeModal recipe={selectedRecipe} closeModal={closeRecipeModal} />}
       </AnimatePresence>
