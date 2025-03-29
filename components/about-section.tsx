@@ -41,13 +41,13 @@ export default function AboutSection() {
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                   <Heart size={24} />
                 </div>
-                <h3 className="text-2xl font-display">¿Cómo nació la idea de Coomi?</h3>
+                <h3 className="text-2xl font-display">Inspiración</h3>
               </div>
 
               <p className="text-muted-foreground mb-4">
-              La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025 decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o incluso crear las suyas propias y compartirlas entre ellos.
-A medida que fui desarrollando el proyecto, se me ocurrieron nuevas ideas: un foro para la comunidad, tips de cocina, una calculadora de ingredientes según el número de personas, y muchas otras funciones que todavía están por venir.
-En principio, Coomi es una página interactiva pensada para que mis seres queridos tengan un acceso fácil y ordenado a mis recetas. Pero no tengo dudas de que puede crecer mucho más y llegar a muchísima gente que disfrute de la cocina tanto como nosotros.
+                Coomi nació de la pasión por la cocina y la necesidad de organizar recetas familiares en un formato
+                digital accesible. El nombre "Coomi" es una adaptación de "Cominegros" (¿Qué como, Negro?), un apodo
+                cariñoso utilizado entre amigos al compartir recetas.
               </p>
 
               <p className="text-muted-foreground">
@@ -232,7 +232,7 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
                 </a>
 
                 <a
-                  href="mailto:martin.alejandro.moore@gmail.com"
+                  href="mailto:your.email@example.com"
                   className="flex items-center gap-2 bg-primary text-white hover:bg-primary/80 transition-colors px-4 py-2 rounded-md"
                 >
                   <span>Contacto</span>
