@@ -32,12 +32,9 @@ const dancingScript = Dancing_Script({
 })
 
 export const metadata: Metadata = {
-  title: "Coomi - ¿Qué como?",
+  title: "Coomi - ¿Qué como, Ne?",
   description:
-    "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familia. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.
-Incluye un buscador por ingredientes para cuando tengas algo en la heladera y no sepas qué hacer.
-También tenés una calculadora que ajusta las cantidades según cuántas personas comen.
-Hay una sección de recetas vegetarianas, tips de cocina que te van a salvar, y muy pronto, recetas sin TACC.",
+    "Una colección de recetas caseras, probadas y aprobadas. Ajusta cantidades y encuentra recetas con los ingredientes que tenés en casa.",
   generator: "v0.dev",
 }
 
