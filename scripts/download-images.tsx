@@ -13,7 +13,7 @@ const downloadImage = async (url: string, filename: string) => {
     }
 
     const buffer = await response.arrayBuffer()
-    const outputPath = path.join(process.cwd(), "public/images/recipes", filename)
+    const outputPath = path.join(process.cwd(), "public/image", filename)
 
     fs.writeFileSync(outputPath, Buffer.from(buffer))
     console.log(`✅ Downloaded: ${filename}`)
@@ -24,10 +24,10 @@ const downloadImage = async (url: string, filename: string) => {
 
 const downloadAllImages = async () => {
   // Asegúrate de que el directorio existe
-  const dir = path.join(process.cwd(), "public/images/recipes")
+  const dir = path.join(process.cwd(), "public/image")
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
-    console.log("Created directory: public/images/recipes")
+    console.log("Created directory: public/image")
   }
 
   // Descarga cada imagen

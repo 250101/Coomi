@@ -17,7 +17,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <motion.div className="text-4xl font-artistic text-primary" whileHover={{ scale: 1.05 }}>
+          <motion.div className="text-4xl font-logo text-primary" whileHover={{ scale: 1.05 }}>
             Coomi
           </motion.div>
 

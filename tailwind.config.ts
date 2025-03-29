@@ -59,10 +59,10 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        montserrat: ["var(--font-montserrat)"],
-        playfair: ["var(--font-playfair)"],
-        bebas: ["var(--font-bebas)"],
-        satisfy: ["var(--font-satisfy)"],
+        raleway: ["var(--font-raleway)"],
+        merriweather: ["var(--font-merriweather)"],
+        oswald: ["var(--font-oswald)"],
+        dancingScript: ["var(--font-dancing-script)"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

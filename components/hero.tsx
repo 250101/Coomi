@@ -48,10 +48,10 @@ export default function Hero() {
       className="relative h-screen flex items-center justify-center overflow-hidden"
       style={{
         background: `radial-gradient(
-        circle at calc(var(--mouse-x, 0.5) * 100%) calc(var(--mouse-y, 0.5) * 100%), 
-        hsl(var(--secondary)) 0%, 
-        hsl(var(--background)) 50%
-      )`,
+       circle at calc(var(--mouse-x, 0.5) * 100%) calc(var(--mouse-y, 0.5) * 100%), 
+       hsl(var(--secondary)) 0%, 
+       hsl(var(--background)) 50%
+     )`,
       }}
     >
       <div className="absolute inset-0 z-0">
@@ -66,7 +66,7 @@ export default function Hero() {
           className="max-w-3xl mx-auto"
         >
           <motion.h1
-            className="text-7xl md:text-9xl font-display mb-4 text-primary"
+            className="text-7xl md:text-9xl font-oswald mb-4 text-primary"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -75,7 +75,7 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            className="text-2xl md:text-4xl font-artistic mb-6 text-foreground/90"
+            className="text-2xl md:text-4xl font-dancingScript mb-6 text-foreground/90"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}

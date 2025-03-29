@@ -24,7 +24,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
   const [mounted, setMounted] = useState(false)
 
   // Get translation function from language context
-  const { t, language, setLanguage } = useLanguage()
+  const { t } = useLanguage()
 
   // After mounting, we can safely show the theme toggle
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
         <div className="container mx-auto px-4 flex justify-between items-center">
           <motion.a
             href="#"
-            className="text-3xl font-artistic text-primary"
+            className="text-3xl font-oswald text-primary"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -198,7 +198,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       >
         <div className="container mx-auto px-4 py-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-10">
-            <span className="text-3xl font-artistic text-primary">Coomi</span>
+            <span className="text-3xl font-oswald text-primary">Coomi</span>
             <motion.button
               onClick={() => setMobileMenuOpen(false)}
               whileHover={{ scale: 1.1 }}
@@ -281,25 +281,6 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
             >
               {t("aboutProject")}
             </motion.a>
-
-            {/* Language options in mobile menu */}
-            <div className="py-2 border-b border-border">
-              <p className="text-muted-foreground text-sm mb-2">{t("language")}</p>
-              <div className="flex gap-4">
-                <button
-                  className={`px-3 py-1 rounded ${language === "es" ? "bg-primary text-white" : "bg-background"}`}
-                  onClick={() => setLanguage("es")}
-                >
-                  {t("spanish")}
-                </button>
-                <button
-                  className={`px-3 py-1 rounded ${language === "en" ? "bg-primary text-white" : "bg-background"}`}
-                  onClick={() => setLanguage("en")}
-                >
-                  {t("english")}
-                </button>
-              </div>
-            </div>
           </div>
 
           <div className="mt-auto flex justify-center">

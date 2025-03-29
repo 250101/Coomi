@@ -35,11 +35,6 @@
     --ring: 20 90% 50%;
 
     --radius: 0.5rem;
-
-    --font-montserrat: "Montserrat", sans-serif;
-    --font-playfair: "Playfair Display", serif;
-    --font-bebas: "Bebas Neue", sans-serif;
-    --font-satisfy: "Satisfy", cursive;
   }
 
   .dark {
@@ -80,24 +75,24 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-montserrat;
+    @apply bg-background text-foreground font-raleway;
     overflow-x: hidden;
   }
   h1,
   h2,
   h3,
   h4 {
-    @apply font-playfair;
+    @apply font-merriweather;
   }
 }
 
 @layer components {
   .font-artistic {
-    @apply font-satisfy;
+    @apply font-dancingScript;
   }
 
   .font-display {
-    @apply font-bebas tracking-wider;
+    @apply font-oswald tracking-wider;
   }
 
   /* Background */
