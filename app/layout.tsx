@@ -35,8 +35,10 @@ export const metadata: Metadata = {
   title: "Coomi - ¿Qué como?",
   description:
     "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiar. Podés recrealas, modificarlas y compartir tu experiencia en el foro.",
-  generator: "v0.dev",
+    icons: {
+      icon: "/favicon.ico",
 }
+};
 
 export default function RootLayout({
   children,
