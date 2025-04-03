@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   description:
     "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiar. Podés recrealas, modificarlas y compartir tu experiencia en el foro.",
     icons: {
-      icon: "/favicon.ico",
+      icon: "/images/favicon.ico",
 }
 };
 
