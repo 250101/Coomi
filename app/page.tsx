@@ -41,6 +41,15 @@ export default function Home() {
     setSelectedRecipe(null)
   }, [])
 
+  // Añade esta función para manejar el cambio de sección desde cualquier parte de la aplicación
+  const handleSectionChange = useCallback((section: string) => {
+    setActiveSection(section)
+    const browseSection = document.getElementById("browse-section")
+    if (browseSection) {
+      browseSection.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [])
+
   useEffect(() => {
     // Apply initial glitch effect on page load
     document.body.classList.add("initial-glitch")
@@ -66,27 +75,51 @@ export default function Home() {
     }
   }, [])
 
+  // Preload images to ensure they're available when needed
+  useEffect(() => {
+    recipes.forEach((recipe) => {
+      const img = new Image()
+      img.src = recipe.image
+    })
+  }, [])
+
+  // Añade este efecto para escuchar el evento personalizado
+  useEffect(() => {
+    const handleActivateTab = (event: CustomEvent) => {
+      if (event.detail && event.detail.tab) {
+        setActiveSection(event.detail.tab)
+      }
+    }
+
+    // Añade el listener como any porque TypeScript no reconoce CustomEvent por defecto
+    document.addEventListener("activateTab", handleActivateTab as any)
+
+    return () => {
+      document.removeEventListener("activateTab", handleActivateTab as any)
+    }
+  }, [])
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-background to-background-dark">
       {/* Cosmic background effect */}
       <div className="cosmic-background"></div>
 
-      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
+      <Navbar activeSection={activeSection} setActiveSection={handleSectionChange} />
 
       <Hero />
 
       <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="tabs-container mb-16">
-          <div className="tabs flex justify-center gap-10 mb-12 border-b border-border pb-5">
+        <div id="browse-section" className="tabs-container mb-16">
+          <div className="tabs flex justify-center items-center gap-10 mb-12 border-b border-border pb-5 text-center">
             <button
-              className={`tab text-2xl font-artistic transition-all ${activeSection === "browse" ? "text-primary" : "text-muted-foreground"}`}
-              onClick={() => setActiveSection("browse")}
+              className={`tab text-2xl font-display transition-all ${activeSection === "browse" ? "text-primary" : "text-muted-foreground"}`}
+              onClick={() => handleSectionChange("browse")}
             >
               Explorar Recetas
             </button>
             <button
-              className={`tab text-2xl font-artistic transition-all ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}
-              onClick={() => setActiveSection("search")}
+              className={`tab text-2xl font-display transition-all ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}
+              onClick={() => handleSectionChange("search")}
             >
               Buscar por Ingredientes
             </button>

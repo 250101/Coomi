@@ -93,11 +93,11 @@ export default function RecipeModal({ recipe, closeModal }: RecipeModalProps) {
                   <h3 className="text-xl font-display mb-4">{t("preparation")}</h3>
                   <ol className="space-y-6">
                     {recipe.steps.map((step, index) => (
-                      <li key={index} className="relative pl-10">
-                        <span className="absolute left-0 top-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">
+                      <li key={index} className="relative pl-10 flex items-start">
+                        <span className="absolute left-0 top-1 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">
                           {index + 1}
                         </span>
-                        {step}
+                        <div>{step}</div>
                       </li>
                     ))}
                   </ol>

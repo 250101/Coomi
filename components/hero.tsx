@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import Logo from "@/components/logo"
 
 export default function Hero() {
   // Reference to the hero section element for mouse tracking
@@ -36,9 +37,15 @@ export default function Hero() {
 
   // Scroll to content section when button is clicked
   const scrollToContent = () => {
-    const contentSection = document.getElementById("browse")
-    if (contentSection) {
-      contentSection.scrollIntoView({ behavior: "smooth" })
+    const browseSection = document.getElementById("browse-section")
+    if (browseSection) {
+      browseSection.scrollIntoView({ behavior: "smooth" })
+
+      // Intenta encontrar y activar la pestaña "browse"
+      // Esto funciona si la función setActiveSection está disponible globalmente
+      // a través de un contexto o si se pasa como prop
+      const event = new CustomEvent("activateTab", { detail: { tab: "browse" } })
+      document.dispatchEvent(event)
     }
   }
 
@@ -65,23 +72,14 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl mx-auto"
         >
-          <motion.h1
-            className="text-7xl md:text-9xl font-oswald mb-4 text-primary"
+          <motion.div
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex justify-center mb-6"
           >
-            {t("heroTitle")}
-          </motion.h1>
-
-          <motion.p
-            className="text-2xl md:text-4xl font-dancingScript mb-6 text-foreground/90"
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            {t("heroSubtitle")}
-          </motion.p>
+            <Logo size="large" />
+          </motion.div>
 
           <motion.p
             className="text-lg text-foreground/70 max-w-xl mx-auto mb-12"
@@ -108,7 +106,7 @@ export default function Hero() {
 
       {/* Animated down arrow to guide users to scroll down */}
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer flex items-center justify-center"
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
         onClick={scrollToContent}

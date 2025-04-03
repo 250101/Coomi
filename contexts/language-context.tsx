@@ -72,9 +72,9 @@ const translations = {
 
     // Hero
     heroTitle: "Coomi",
-    heroSubtitle: "¿Qué como?",
+    heroSubtitle: "¿Qué como, Ne?",
     heroDescription:
-      "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiar. Podés recrealas, modificarlas y compartir tu experiencia en el foro.",
+      "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiar. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.",
     heroButton: "Explorar Recetas",
 
     // Search
@@ -157,7 +157,7 @@ const translations = {
     heroTitle: "Coomi",
     heroSubtitle: "What's cooking?",
     heroDescription:
-      "In this interactive menu, you'll find all the recipes I've ever cooked for my friends and family. You can recreate them, modify them, and share your experience in the forum.",
+      "In this interactive menu you'll find all the recipes I've ever cooked for my friends and family. You can recreate them, modify them, and share your experience in the forum.",
     heroButton: "Explore Recipes",
 
     // Search

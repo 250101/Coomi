@@ -41,11 +41,11 @@ export default function AboutSection() {
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                   <Heart size={24} />
                 </div>
-                <h3 className="text-2xl font-display">¿Como nació la idea de Coomi?</h3>
+                <h3 className="text-2xl font-display">¿Cómo nació la idea de Coomi?</h3>
               </div>
 
               <p className="text-muted-foreground mb-4">
-              La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025 decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o incluso crear las suyas propias y compartirlas entre ellos.
+                La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025 decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o incluso crear las suyas propias y compartirlas entre ellos.
 
               A medida que fui desarrollando el proyecto, se me ocurrieron nuevas ideas: un foro para la comunidad, tips de cocina, una calculadora de ingredientes según el número de personas, y muchas otras funciones que todavía están por venir.
 
@@ -208,8 +208,7 @@ export default function AboutSection() {
               <h3 className="text-2xl font-display mb-6">Conectemos</h3>
 
               <p className="text-muted-foreground mb-6">
-                Si estás interesado en colaborar, tienes sugerencias o simplemente quieres compartir tu experiencia con
-                Coomi, me encantaría saber de ti:
+                Estos son algunos de los proyectos en los que trabajé. Cada uno refleja mi enfoque en el detalle, la funcionalidad y la creatividad. Estoy en constante aprendizaje y evolución, y cada trabajo representa un paso más en ese camino.:
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -234,7 +233,7 @@ export default function AboutSection() {
                 </a>
 
                 <a
-                  href="mailto:your.email@example.com"
+                  href="mailto:martin.alejandro.moore@gmail.com"
                   className="flex items-center gap-2 bg-primary text-white hover:bg-primary/80 transition-colors px-4 py-2 rounded-md"
                 >
                   <span>Contacto</span>

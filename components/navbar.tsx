@@ -6,6 +6,7 @@ import { Menu, X, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/contexts/language-context"
 import LanguageSwitcher from "@/components/language-switcher"
+import Logo from "@/components/logo"
 
 interface NavbarProps {
   activeSection: string
@@ -47,9 +48,21 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
 
   // Scroll to section and close mobile menu
   const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId)
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" })
+    // Para el caso específico de "browse" y "search", necesitamos ir a browse-section
+    // y luego activar la pestaña correspondiente
+    if (sectionId === "browse" || sectionId === "search") {
+      const browseSection = document.getElementById("browse-section")
+      if (browseSection) {
+        browseSection.scrollIntoView({ behavior: "smooth" })
+        // Actualizamos la pestaña activa
+        setActiveSection(sectionId)
+      }
+    } else {
+      // Para otras secciones, comportamiento normal
+      const section = document.getElementById(sectionId)
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" })
+      }
     }
     setMobileMenuOpen(false)
   }
@@ -70,16 +83,11 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <motion.a
-            href="#"
-            className="text-3xl font-oswald text-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Coomi
+          <motion.a href="#" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Logo />
           </motion.a>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center justify-center gap-8">
             <motion.a
               href="#browse"
               className={`relative px-1 py-2 ${activeSection === "browse" ? "text-primary" : "text-foreground"}`}
@@ -198,7 +206,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       >
         <div className="container mx-auto px-4 py-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-10">
-            <span className="text-3xl font-oswald text-primary">Coomi</span>
+            <Logo />
             <motion.button
               onClick={() => setMobileMenuOpen(false)}
               whileHover={{ scale: 1.1 }}

@@ -148,9 +148,10 @@ function RecipeCard({ recipe, openRecipeModal }: RecipeCardProps) {
 
         <p className="recipe-description">{recipe.description}</p>
 
+        {/* Modificar el footer de las tarjetas de recetas para centrar el botón */}
         <div className="recipe-footer">
           <button
-            className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/80 transition-colors"
+            className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/80 transition-colors mx-auto"
             onClick={handleCardClick}
             aria-label={`View recipe for ${recipe.name}`}
           >
