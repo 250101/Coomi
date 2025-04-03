@@ -52,7 +52,7 @@ export const recipes: Recipe[] = [
     servings: 6,
     servingType: "Porciones",
     time: 15,
-    tags: ["Con Pan";"Entrada"],
+    tags: ["Con Pan","Entrada"],
     ingredients: [
       { name: "Manteca", quantity: 200, unit: "g" },
       { name: "Pasta de miso", quantity: 30, unit: "g" },
@@ -155,7 +155,7 @@ export const recipes: Recipe[] = [
     servings: 36,
     servingType: "Empanadas",
     time: 120,
-    tags: ["Empanadas";"Domingo"],
+    tags: ["Empanadas"],
     ingredients: [
       { name: "Zanahoria", quantity: 1, unit: "unidad" },
       { name: "Cebollas medianas", quantity: 2, unit: "unidades" },
@@ -254,7 +254,7 @@ export const recipes: Recipe[] = [
     servings: 5,
     servingType: "Porciones",
     time: 40,
-    tags: ["Vegetariano", "Italo-Asiático";"Sin TACC"],
+    tags: ["Vegetariano", "Italo-Asiático","Sin TACC"],
     ingredients: [
       { name: "Arroz carnaroli", quantity: 500, unit: "g" },
       { name: "Cebollas medianas", quantity: 2, unit: "unidades" },
@@ -284,7 +284,7 @@ export const recipes: Recipe[] = [
     servings: 3,
     servingType: "Porciones",
     time: 45,
-    tags: ["Gourmet", "Carne";"Sin TACC"],
+    tags: ["Gourmet", "Carne","Sin TACC"],
     ingredients: [
       { name: "Lomo de cerdo", quantity: 500, unit: "g" },
       { name: "Papas", quantity: 5, unit: "unidades" },
