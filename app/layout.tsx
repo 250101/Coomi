@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 Incluye un buscador por ingredientes para cuando tengas algo en la heladera y no sepas qué hacer.
 También tenés una calculadora que ajusta las cantidades según cuántas personas comen.
 Hay una sección de recetas vegetarianas, tips de cocina que te van a salvar, y muy pronto, recetas sin TACC.",
-  generator: "v0.dev",
+  generator: "v0.dev"
 }
 
 export default function RootLayout({
