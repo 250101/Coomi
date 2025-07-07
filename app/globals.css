@@ -39,7 +39,6 @@
     --font-montserrat: "Montserrat", sans-serif;
     --font-playfair: "Playfair Display", serif;
     --font-bebas: "Bebas Neue", sans-serif;
-    --font-satisfy: "Satisfy", cursive;
   }
 
   .dark {
@@ -93,7 +92,6 @@
 
 @layer components {
   .font-artistic {
-    @apply font-satisfy;
   }
 
   .font-display {

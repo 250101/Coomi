@@ -26,12 +26,6 @@ const bebas = localFont({
   display: "swap",
 })
 
-const satisfy = localFont({
-  src: "../public/fonts/Satisfy-Regular.woff2",
-  variable: "--font-satisfy",
-  display: "swap",
-})
-
 export const metadata: Metadata = {
   title: "Coomi - ¿Qué como?",
   description: `En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiares. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.
