@@ -53,7 +53,7 @@ export default function AboutSection() {
               </p>
 
               <p className="text-muted-foreground">
-                Este proyecto fusiona mi interés por la gastronomía con mi experiencia en desarrollo web, creando una
+                Este proyecto fusiona mi interés por la gastronomía con mi curiosidad en desarrollo web, creando una
                 plataforma donde las recetas tradicionales y caseras pueden ser preservadas y compartidas con una
                 interfaz moderna y atractiva.
               </p>
@@ -133,8 +133,8 @@ export default function AboutSection() {
               </div>
 
               <p className="text-muted-foreground mb-4">
-                Desarrollar Coomi ha sido un viaje que combina dos de mis grandes pasiones: la programación y la cocina.
-                Este proyecto representa la intersección perfecta entre mi vida profesional como desarrollador y mi amor
+                Desarrollar Coomi ha sido un viaje que combina: la programación y la cocina.
+                Este proyecto representa la intersección perfecta entre mi curiosidad de aprender nuevas herramientas como desarrollador y mi amor
                 por la gastronomía.
               </p>
 

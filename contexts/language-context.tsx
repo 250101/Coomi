@@ -74,7 +74,7 @@ const translations = {
     heroTitle: "Coomi",
     heroSubtitle: "¿Qué como, Ne?",
     heroDescription:
-      "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiar. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.",
+      "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiares. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.",
     heroButton: "Explorar Recetas",
 
     // Search
@@ -114,7 +114,7 @@ const translations = {
     // Forum
     recipesForum: "Foro de Recetas",
     forumDescription:
-      "Comparte tus consejos, variaciones o preguntas sobre nuestras recetas. ¡La comunidad de Cominegros está aquí para ayudarte!",
+      "Comparte tus consejos, variaciones o preguntas sobre nuestras recetas. ¡La comunidad de Coomi está aquí para ayudarte!",
     leaveComment: "Deja tu comentario",
     yourName: "Tu nombre",
     yourComment: "Tu comentario",

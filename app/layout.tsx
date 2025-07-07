@@ -34,7 +34,7 @@ const dancingScript = Dancing_Script({
 export const metadata: Metadata = {
   title: "Coomi - ¿Qué como?",
   description:
-    "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiar. Podés recrealas, modificarlas y compartir tu experiencia en el foro.",
+    "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiares. Podés recrealas, modificarlas y compartir tu experiencia en el foro.",
     icons: {
       icon: "/images/favicon.ico",
 }
