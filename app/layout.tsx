@@ -34,10 +34,10 @@ const satisfy = localFont({
 
 export const metadata: Metadata = {
   title: "Coomi - ¿Qué como?",
-  description: "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiares. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.
+  description: `En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiares. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.
 Incluye un buscador por ingredientes para cuando tengas algo en la heladera y no sepas qué hacer.
 También tenés una calculadora que ajusta las cantidades según cuántas personas comen.
-Hay una sección de recetas vegetarianas, tips de cocina que te van a salvar, y muy pronto, recetas sin TACC.",
+Hay una sección de recetas vegetarianas, tips de cocina que te van a salvar, y muy pronto, recetas sin TACC.`,
   generator: "v0.dev"
 }
 
