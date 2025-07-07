@@ -6,7 +6,6 @@ import { Menu, X, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/contexts/language-context"
 import LanguageSwitcher from "@/components/language-switcher"
-import Logo from "@/components/logo"
 
 interface NavbarProps {
   activeSection: string
@@ -25,7 +24,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
   const [mounted, setMounted] = useState(false)
 
   // Get translation function from language context
-  const { t } = useLanguage()
+  const { t, language, setLanguage } = useLanguage()
 
   // After mounting, we can safely show the theme toggle
   useEffect(() => {
@@ -48,21 +47,9 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
 
   // Scroll to section and close mobile menu
   const scrollToSection = (sectionId: string) => {
-    // Para el caso específico de "browse" y "search", necesitamos ir a browse-section
-    // y luego activar la pestaña correspondiente
-    if (sectionId === "browse" || sectionId === "search") {
-      const browseSection = document.getElementById("browse-section")
-      if (browseSection) {
-        browseSection.scrollIntoView({ behavior: "smooth" })
-        // Actualizamos la pestaña activa
-        setActiveSection(sectionId)
-      }
-    } else {
-      // Para otras secciones, comportamiento normal
-      const section = document.getElementById(sectionId)
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" })
-      }
+    const section = document.getElementById(sectionId)
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" })
     }
     setMobileMenuOpen(false)
   }
@@ -83,11 +70,16 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <motion.a href="#" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Logo />
+          <motion.a
+            href="#"
+            className="text-3xl font-artistic text-primary"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Coomi
           </motion.a>
 
-          <div className="hidden md:flex items-center justify-center gap-8">
+          <div className="hidden md:flex items-center gap-8">
             <motion.a
               href="#browse"
               className={`relative px-1 py-2 ${activeSection === "browse" ? "text-primary" : "text-foreground"}`}
@@ -206,7 +198,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       >
         <div className="container mx-auto px-4 py-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-10">
-            <Logo />
+            <span className="text-3xl font-artistic text-primary">Coomi</span>
             <motion.button
               onClick={() => setMobileMenuOpen(false)}
               whileHover={{ scale: 1.1 }}
@@ -289,6 +281,25 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
             >
               {t("aboutProject")}
             </motion.a>
+
+            {/* Language options in mobile menu */}
+            <div className="py-2 border-b border-border">
+              <p className="text-muted-foreground text-sm mb-2">{t("language")}</p>
+              <div className="flex gap-4">
+                <button
+                  className={`px-3 py-1 rounded ${language === "es" ? "bg-primary text-white" : "bg-background"}`}
+                  onClick={() => setLanguage("es")}
+                >
+                  {t("spanish")}
+                </button>
+                <button
+                  className={`px-3 py-1 rounded ${language === "en" ? "bg-primary text-white" : "bg-background"}`}
+                  onClick={() => setLanguage("en")}
+                >
+                  {t("english")}
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="mt-auto flex justify-center">

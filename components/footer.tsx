@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
-import Logo from "@/components/logo"
 
 export default function Footer() {
   // Get translation function from language context
@@ -18,12 +17,12 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Logo />
+          <motion.div className="text-4xl font-artistic text-primary" whileHover={{ scale: 1.05 }}>
+            Coomi
           </motion.div>
 
           <motion.p className="text-muted-foreground text-center md:text-right">
-            © {new Date().getFullYear()} {t("createdWith")}
+            © {new Date().getFullYear()} Coomi. {t("createdWith")}
           </motion.p>
         </motion.div>
       </div>

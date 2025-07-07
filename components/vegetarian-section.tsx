@@ -94,7 +94,7 @@ export default function VegetarianSection() {
           <h3 className="text-2xl font-display mb-4">{t("glutenFreeOption")}</h3>
           <p>
             Podés cambiar el panko por panko sin TACC. En este caso, en vez de pasar el producto crudo en la harina,
-            pasalo primero por el panko sin TACC, luego por el huevo y por último el panko sin TACC nuevamente.
+            pasalo primero por el panko sin TACC, luego por el huevo y por último el panko sin TACC nuevamente. Recordá usar un aceite renovado para no generar contaminación cruzada-
           </p>
         </motion.div>
       </motion.div>

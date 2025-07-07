@@ -45,13 +45,10 @@ export default function AboutSection() {
               </div>
 
               <p className="text-muted-foreground mb-4">
-                La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025 decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o incluso crear las suyas propias y compartirlas entre ellos.
-
-              A medida que fui desarrollando el proyecto, se me ocurrieron nuevas ideas: un foro para la comunidad, tips de cocina, una calculadora de ingredientes según el número de personas, y muchas otras funciones que todavía están por venir.
-
-              En principio, Coomi es una página interactiva pensada para que mis seres queridos tengan un acceso fácil y ordenado a mis recetas. Pero no tengo dudas de que puede crecer mucho más y llegar a muchísima gente que disfrute de la cocina tanto como nosotros.
+              La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025 decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o incluso crear las suyas propias y compartirlas entre ellos.
+A medida que fui desarrollando el proyecto, se me ocurrieron nuevas ideas: un foro para la comunidad, tips de cocina, una calculadora de ingredientes según el número de personas, y muchas otras funciones que todavía están por venir.
+En principio, Coomi es una página interactiva pensada para que mis seres queridos tengan un acceso fácil y ordenado a mis recetas. Pero no tengo dudas de que puede crecer mucho más y llegar a muchísima gente que disfrute de la cocina tanto como nosotros.
               </p>
-
               <p className="text-muted-foreground">
                 Este proyecto fusiona mi interés por la gastronomía con mi curiosidad en desarrollo web, creando una
                 plataforma donde las recetas tradicionales y caseras pueden ser preservadas y compartidas con una
@@ -134,7 +131,7 @@ export default function AboutSection() {
 
               <p className="text-muted-foreground mb-4">
                 Desarrollar Coomi ha sido un viaje que combina: la programación y la cocina.
-                Este proyecto representa la intersección perfecta entre mi curiosidad de aprender nuevas herramientas como desarrollador y mi amor
+                Este proyecto representa la intersección perfecta entre mi constante aprendisaje de nuevas herramientas como desarrollador y mi amor
                 por la gastronomía.
               </p>
 
@@ -168,6 +165,10 @@ export default function AboutSection() {
                 <div className="bg-background p-4 rounded-md">
                   <h4 className="font-medium text-lg mb-2">Funcionalidades</h4>
                   <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-primary rounded-full"></span>
+                      <span>Más recetas</span>
+                    </li>
                     <li className="flex items-center gap-2">
                       <span className="w-2 h-2 bg-primary rounded-full"></span>
                       <span>Sistema de autenticación de usuarios</span>
@@ -208,7 +209,8 @@ export default function AboutSection() {
               <h3 className="text-2xl font-display mb-6">Conectemos</h3>
 
               <p className="text-muted-foreground mb-6">
-                Estos son algunos de los proyectos en los que trabajé. Cada uno refleja mi enfoque en el detalle, la funcionalidad y la creatividad. Estoy en constante aprendizaje y evolución, y cada trabajo representa un paso más en ese camino.:
+                Si tienes sugerencias o simplemente quieres compartir tu experiencia con
+                Coomi, me encantaría saber de ti:
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -233,7 +235,7 @@ export default function AboutSection() {
                 </a>
 
                 <a
-                  href="mailto:martin.alejandro.moore@gmail.com"
+                  href="mailto:your.email@example.com"
                   className="flex items-center gap-2 bg-primary text-white hover:bg-primary/80 transition-colors px-4 py-2 rounded-md"
                 >
                   <span>Contacto</span>

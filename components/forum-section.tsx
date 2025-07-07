@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Send, Trash2, MessageSquare, User, Shield } from "lucide-react"
+import { Send, Trash2, MessageSquare, User } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 // Define the comment type structure
@@ -16,70 +16,6 @@ interface Comment {
   recipe?: string
 }
 
-// Simulated admin check - in a real app, this would come from authentication
-const isAdmin = () => {
-  // For demo purposes, you could use a password or secret key stored in localStorage
-  // In a real app, this would be handled by proper authentication
-  const adminKey = localStorage.getItem("adminKey")
-  return adminKey === "admin123" // Simple example - replace with proper auth
-}
-
-// Admin login component
-function AdminLogin() {
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [showLogin, setShowLogin] = useState(false)
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (password === "admin123") {
-      // Simple example - replace with proper auth
-      localStorage.setItem("adminKey", password)
-      setError("")
-      setShowLogin(false)
-      window.location.reload() // Refresh to update admin status
-    } else {
-      setError("Contraseña incorrecta")
-    }
-  }
-
-  if (!showLogin) {
-    return (
-      <div className="text-right mb-4">
-        <button
-          onClick={() => setShowLogin(true)}
-          className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 ml-auto"
-        >
-          <Shield size={14} />
-          <span>Admin</span>
-        </button>
-      </div>
-    )
-  }
-
-  return (
-    <div className="bg-card p-4 rounded-lg mb-4">
-      <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
-        <Shield size={14} />
-        <span>Acceso Administrador</span>
-      </h4>
-      <form onSubmit={handleLogin} className="flex gap-2">
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Contraseña"
-          className="flex-grow p-2 text-sm bg-background border border-border rounded-md"
-        />
-        <button type="submit" className="bg-primary text-white px-3 py-2 rounded-md text-sm">
-          Acceder
-        </button>
-      </form>
-      {error && <p className="text-destructive text-xs mt-1">{error}</p>}
-    </div>
-  )
-}
-
 export default function ForumSection() {
   // State for managing comments
   const [comments, setComments] = useState<Comment[]>([])
@@ -88,15 +24,9 @@ export default function ForumSection() {
   const [authorName, setAuthorName] = useState("")
   const [selectedRecipe, setSelectedRecipe] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [adminMode, setAdminMode] = useState(false)
 
   // Get translation function from language context
   const { t } = useLanguage()
-
-  // Check if user is admin
-  useEffect(() => {
-    setAdminMode(isAdmin())
-  }, [])
 
   // Load comments from localStorage on component mount
   useEffect(() => {
@@ -118,9 +48,7 @@ export default function ForumSection() {
 
   // Save comments to localStorage whenever they change
   useEffect(() => {
-    if (comments.length > 0) {
-      localStorage.setItem("forumComments", JSON.stringify(comments))
-    }
+    localStorage.setItem("forumComments", JSON.stringify(comments))
   }, [comments])
 
   // Handle form submission for new comments
@@ -149,18 +77,9 @@ export default function ForumSection() {
     setIsSubmitting(false)
   }
 
-  // Delete a comment by ID - only available to admin
+  // Delete a comment by ID
   const deleteComment = (id: string) => {
-    if (!adminMode) return // Only admin can delete comments
-
-    setComments((prev) => {
-      const filtered = prev.filter((comment) => comment.id !== id)
-      // If we're deleting the last comment, clear localStorage to prevent issues
-      if (filtered.length === 0) {
-        localStorage.removeItem("forumComments")
-      }
-      return filtered
-    })
+    setComments((prev) => prev.filter((comment) => comment.id !== id))
   }
 
   // Format date for display using locale-specific formatting
@@ -224,9 +143,6 @@ export default function ForumSection() {
           </div>
 
           <p className="text-muted-foreground mb-8">{t("forumDescription")}</p>
-
-          {/* Admin login component */}
-          <AdminLogin />
 
           {/* Comment form */}
           <div className="bg-card rounded-lg p-6 mb-10 shadow-md">
@@ -327,17 +243,15 @@ export default function ForumSection() {
                       </div>
                     </div>
 
-                    {adminMode && (
-                      <motion.button
-                        onClick={() => deleteComment(comment.id)}
-                        className="text-muted-foreground hover:text-destructive transition-colors"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        aria-label="Eliminar comentario"
-                      >
-                        <Trash2 size={16} />
-                      </motion.button>
-                    )}
+                    <motion.button
+                      onClick={() => deleteComment(comment.id)}
+                      className="text-muted-foreground hover:text-destructive transition-colors"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      aria-label="Eliminar comentario"
+                    >
+                      <Trash2 size={16} />
+                    </motion.button>
                   </div>
 
                   {recipeName && (

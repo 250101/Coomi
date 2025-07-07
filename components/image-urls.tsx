@@ -3,60 +3,60 @@
 
 export const imageUrls = [
   {
-    name: "1.jpeg",
-    url: "/images/1.jpeg",
+    name: "crema-boniato.jpeg",
+    url: "./image/1.jpeg",
   },
   {
-    name: "2.jpeg",
-    url: "/images/2.jpeg",
+    name: "manteca-miso.jpeg",
+    url: "./image/2.jpeg",
   },
   {
-    name: "3.jpeg",
-    url: "/images/3.jpeg",
+    name: "crema-champinones.jpeg",
+    url: "./image/3.jpeg",
   },
   {
-    name: "4.jpeg",
-    url: "/images/4.jpeg",
+    name: "croquetas-risotto.jpeg",
+    url: "./image/4.jpeg",
   },
   {
-    name: "5.jpeg",
-    url: "/images/5.jpeg",
+    name: "croquetas-osobuco.jpeg",
+    url: "./image/5.jpeg",
   },
   {
-    name: "6.jpeg",
-    url: "/images/6.jpeg",
+    name: "empanadas.jpeg",
+    url: "./image/6.jpeg",
   },
   {
-    name: "7.jpeg",
-    url: "/images/7.jpeg",
+    name: "katsudon.jpeg",
+    url: "./image/7.jpeg",
   },
   {
-    name: "8.jpeg",
-    url: "/images/8.jpeg",
+    name: "katsu-curry.jpeg",
+    url: "./image/8.jpeg",
   },
   {
-    name: "9.jpeg",
-    url: "/images/9.jpeg",
+    name: "risotto.jpeg",
+    url: "./image/9.jpeg",
   },
   {
-    name: "10.jpeg",
-    url: "/images/10.jpeg",
+    name: "lomo-boniato.jpeg",
+    url: "./image/10.jpeg",
   },
   {
-    name: "11.jpeg",
-    url: "/images/11.jpeg",
+    name: "tortilla.jpeg",
+    url: "./image/11.jpeg",
   },
   {
-    name: "12.jpeg",
-    url: "/images/12.jpeg",
+    name: "tiramisu.jpeg",
+    url: "./image/12.jpeg",
   },
   {
-    name: "13.jpeg",
-    url: "/images/13.jpeg",
+    name: "rolls-canela.jpeg",
+    url: "./image/13.jpeg",
   },
   {
-    name: "14.jpeg",
-    url: "/images/14.jpeg",
+    name: "cookies.jpeg",
+    url: "./image/14.jpeg",
   },
 ]
 
