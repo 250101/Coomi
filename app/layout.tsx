@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`${montserrat.variable} ${playfair.variable} ${bebas.variable} ${satisfy.variable} font-montserrat`}
+        className={`${montserrat.variable} ${playfair.variable} ${bebas.variable} font-montserrat`}
       >
         {/* Wrap the app with both ThemeProvider and LanguageProvider */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
