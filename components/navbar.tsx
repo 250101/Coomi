@@ -6,6 +6,7 @@ import { Menu, X, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/contexts/language-context"
 import LanguageSwitcher from "@/components/language-switcher"
+import Logo from "@/components/logo"
 
 interface NavbarProps {
   activeSection: string

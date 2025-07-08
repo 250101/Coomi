@@ -74,7 +74,7 @@ const translations = {
     heroTitle: "Coomi",
     heroSubtitle: "¿Qué como, Ne?",
     heroDescription:
-      "Una colección de recetas caseras, probadas y aprobadas. Ajusta cantidades y encuentra recetas con los ingredientes que tenés en casa.",
+      "En este menú interactivo vas a encontrar todas las recetas que alguna vez cociné para mis amigos y familiares. Podés recrearlas, modificarlas y compartir tu experiencia en el foro.",
     heroButton: "Explorar Recetas",
 
     // Search
@@ -157,7 +157,7 @@ const translations = {
     heroTitle: "Coomi",
     heroSubtitle: "What's cooking?",
     heroDescription:
-      "A collection of homemade recipes, tested and approved. Adjust quantities and find recipes with the ingredients you have at home.",
+      "In this interactive menu you'll find all the recipes I've ever cooked for my friends and family. You can recreate them, modify them, and share your experience in the forum.",
     heroButton: "Explore Recipes",
 
     // Search
