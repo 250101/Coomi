@@ -52,6 +52,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
+        // 🎯 LOGO COLORS ADDED
+        "vibrant-orange": "hsl(var(--vibrant-orange))",
+        "neon-blue": "hsl(var(--neon-blue))",
+        "dark-navy": "hsl(var(--dark-navy))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,4 +77,3 @@ const config: Config = {
 }
 
 export default config
-
