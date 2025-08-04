@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import Logo from "@/components/logo"
 
 export default function Hero() {
   // Reference to the hero section element for mouse tracking

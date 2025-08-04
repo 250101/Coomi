@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
-import Image from "next/image"
+import Logo from "@/components/logo"
 
 export default function Footer() {
-  // get translation function from language context
+  // Get translation function from language context
   const { t } = useLanguage()
 
   return (
@@ -19,17 +19,7 @@ export default function Footer() {
           transition={{ duration: 0.5 }}
         >
           <motion.div whileHover={{ scale: 1.05 }}>
-            {/* Logo con efecto neón azul */}
-            <div className="logo-container logo-glow-effect">
-              <Image
-                src="/logo.png" // Tu logo en la carpeta public
-                alt="Logo Coomi"
-                width={200} // Ajusta el ancho según tu logo
-                height={80} // Ajusta la altura según tu logo
-                className="logo-image"
-                priority // Para cargar la imagen rápidamente
-              />
-            </div>
+            <Logo />
           </motion.div>
 
           <motion.p className="text-muted-foreground text-center md:text-right">
