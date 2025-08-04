@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Menu, X, ShoppingCart } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
-import { useShoppingCart } from "@/contexts/shopping-cart-context"
 import LanguageSwitcher from "./language-switcher"
 import Logo from "./logo"
 
