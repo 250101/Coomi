@@ -89,40 +89,6 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
             >
               {t("about")}
             </button>
-            <button
-              onClick={() => handleNavLinkClick("cart")}
-              className={`nav-link ${activeSection === "cart" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors relative`}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
-              )}
-            </button>
-            <LanguageSwitcher />
-          </nav>
-
-          {/* Mobile Navigation Toggle */}
-          <div className="flex items-center md:hidden gap-4">
-            <button
-              onClick={() => handleNavLinkClick("cart")}
-              className={`nav-link ${activeSection === "cart" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors relative`}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-foreground hover:text-primary transition-colors"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
           </div>
         </div>
       </div>
