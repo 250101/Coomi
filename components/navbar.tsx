@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Menu, X, Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
+import { Menu, X, ShoppingCart } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
-import LanguageSwitcher from "@/components/language-switcher"
-import Logo from "@/components/logo"
+import { useShoppingCart } from "@/contexts/shopping-cart-context"
+import LanguageSwitcher from "./language-switcher"
+import Logo from "./logo"
 
 interface NavbarProps {
   activeSection: string
@@ -14,310 +14,166 @@ interface NavbarProps {
 }
 
 export default function Navbar({ activeSection, setActiveSection }: NavbarProps) {
-  // State for tracking scroll position and mobile menu visibility
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const { t } = useLanguage()
+  const { getCartItemCount } = useShoppingCart()
+  const cartItemCount = getCartItemCount()
 
-  // Theme hooks for dark/light mode
-  const { theme, setTheme } = useTheme()
-
-  // Track if component is mounted to avoid hydration issues
-  const [mounted, setMounted] = useState(false)
-
-  // Get translation function from language context
-  const { t, language, setLanguage } = useLanguage()
-
-  // After mounting, we can safely show the theme toggle
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Add scroll event listener to change navbar appearance on scroll
+  // Función para manejar el scroll y cambiar la apariencia de la navbar
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
+      const scrollPosition = window.scrollY
+      setIsScrolled(scrollPosition > 50)
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Scroll to section and close mobile menu
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId)
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" })
-    }
-    setMobileMenuOpen(false)
-  }
+  // Función para manejar el clic en un enlace de navegación
+  const handleNavLinkClick = (section: string) => {
+    setActiveSection(section)
+    setIsMenuOpen(false)
 
-  // Toggle between light and dark theme
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
+    // Scroll to the section
+    const element = document.getElementById(`${section}-section`)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    } else if (section === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   return (
-    <>
-      <motion.nav
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          scrolled ? "bg-background/90 backdrop-blur-md py-4 shadow-lg" : "py-6"
-        }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <motion.a
-            href="#"
-            className="text-3xl font-artistic text-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Coomi
-          </motion.a>
+    <motion.header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-background/80 backdrop-blur-md shadow-md" : "bg-transparent"
+      }`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          <Logo />
 
-          <div className="hidden md:flex items-center gap-8">
-            <motion.a
-              href="#browse"
-              className={`relative px-1 py-2 ${activeSection === "browse" ? "text-primary" : "text-foreground"}`}
-              onClick={(e) => {
-                e.preventDefault()
-                setActiveSection("browse")
-                scrollToSection("browse")
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <button
+              onClick={() => handleNavLinkClick("home")}
+              className={`nav-link ${activeSection === "home" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              {t("explore")}
-              {activeSection === "browse" && (
-                <motion.span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" layoutId="navbar-underline" />
-              )}
-            </motion.a>
-            <motion.a
-              href="#search"
-              className={`relative px-1 py-2 ${activeSection === "search" ? "text-primary" : "text-foreground"}`}
-              onClick={(e) => {
-                e.preventDefault()
-                setActiveSection("search")
-                scrollToSection("search")
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              {t("home")}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("browse")}
+              className={`nav-link ${activeSection === "browse" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              {t("search")}
-              {activeSection === "search" && (
-                <motion.span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" layoutId="navbar-underline" />
-              )}
-            </motion.a>
-            <motion.a
-              href="#vegetarian"
-              className="relative px-1 py-2"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("vegetarian")
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              {t("recipes")}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("locations")}
+              className={`nav-link ${activeSection === "locations" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              {t("vegetarian")}
-            </motion.a>
-            <motion.a
-              href="#tips"
-              className="relative px-1 py-2"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("tips")
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {t("tips")}
-            </motion.a>
-            <motion.a
-              href="#forum"
-              className="relative px-1 py-2"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("forum")
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              {t("locations")}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("forum")}
+              className={`nav-link ${activeSection === "forum" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
               {t("forum")}
-            </motion.a>
-            <motion.a
-              href="#about"
-              className="relative px-1 py-2"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("about")
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("about")}
+              className={`nav-link ${activeSection === "about" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
               {t("about")}
-            </motion.a>
-
-            {/* Language switcher */}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("cart")}
+              className={`nav-link ${activeSection === "cart" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors relative`}
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
+            </button>
             <LanguageSwitcher />
+          </nav>
 
-            {/* Theme toggle - only render when mounted to avoid hydration mismatch */}
-            {mounted && (
-              <motion.button
-                onClick={toggleTheme}
-                className={`theme-toggle-btn ${theme === "dark" ? "dark" : "light"}`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              >
-                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-              </motion.button>
-            )}
+          {/* Mobile Navigation Toggle */}
+          <div className="flex items-center md:hidden gap-4">
+            <button
+              onClick={() => handleNavLinkClick("cart")}
+              className={`nav-link ${activeSection === "cart" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors relative`}
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-foreground hover:text-primary transition-colors"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
-
-          <motion.button
-            className="md:hidden text-foreground"
-            onClick={() => setMobileMenuOpen(true)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <Menu size={24} />
-          </motion.button>
         </div>
-      </motion.nav>
+      </div>
 
-      {/* Mobile Menu */}
-      <motion.div
-        className={`fixed inset-0 bg-background z-50 ${mobileMenuOpen ? "block" : "hidden"}`}
-        initial={{ x: "100%" }}
-        animate={{ x: mobileMenuOpen ? 0 : "100%" }}
-        transition={{ type: "tween", duration: 0.3 }}
-      >
-        <div className="container mx-auto px-4 py-6 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-10">
-            <span className="text-3xl font-artistic text-primary">Coomi</span>
-            <motion.button
-              onClick={() => setMobileMenuOpen(false)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+      {/* Mobile Navigation Menu */}
+      {isMenuOpen && (
+        <motion.div
+          className="md:hidden bg-background/95 backdrop-blur-md shadow-lg"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            <button
+              onClick={() => handleNavLinkClick("home")}
+              className={`nav-link text-left py-2 ${activeSection === "home" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              <X size={24} />
-            </motion.button>
-          </div>
-
-          <div className="flex flex-col gap-6 text-xl">
-            <motion.a
-              href="#browse"
-              className={`py-2 border-b border-border ${
-                activeSection === "browse" ? "text-primary" : "text-foreground"
-              }`}
-              onClick={(e) => {
-                e.preventDefault()
-                setActiveSection("browse")
-                scrollToSection("browse")
-              }}
-              whileHover={{ x: 10 }}
+              {t("home")}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("browse")}
+              className={`nav-link text-left py-2 ${activeSection === "browse" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              {t("exploreRecipes")}
-            </motion.a>
-            <motion.a
-              href="#search"
-              className={`py-2 border-b border-border ${
-                activeSection === "search" ? "text-primary" : "text-foreground"
-              }`}
-              onClick={(e) => {
-                e.preventDefault()
-                setActiveSection("search")
-                scrollToSection("search")
-              }}
-              whileHover={{ x: 10 }}
+              {t("recipes")}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("locations")}
+              className={`nav-link text-left py-2 ${activeSection === "locations" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              {t("searchByIngredients")}
-            </motion.a>
-            <motion.a
-              href="#vegetarian"
-              className="py-2 border-b border-border"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("vegetarian")
-              }}
-              whileHover={{ x: 10 }}
-            >
-              {t("vegetarian")}
-            </motion.a>
-            <motion.a
-              href="#tips"
-              className="py-2 border-b border-border"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("tips")
-              }}
-              whileHover={{ x: 10 }}
-            >
-              {t("tips")}
-            </motion.a>
-            <motion.a
-              href="#forum"
-              className="py-2 border-b border-border"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("forum")
-              }}
-              whileHover={{ x: 10 }}
+              {t("locations")}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("forum")}
+              className={`nav-link text-left py-2 ${activeSection === "forum" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
               {t("forum")}
-            </motion.a>
-            <motion.a
-              href="#about"
-              className="py-2 border-b border-border"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToSection("about")
-              }}
-              whileHover={{ x: 10 }}
+            </button>
+            <button
+              onClick={() => handleNavLinkClick("about")}
+              className={`nav-link text-left py-2 ${activeSection === "about" ? "text-primary" : "text-muted-foreground"} hover:text-primary transition-colors`}
             >
-              {t("aboutProject")}
-            </motion.a>
-
-            {/* Language options in mobile menu */}
-            <div className="py-2 border-b border-border">
-              <p className="text-muted-foreground text-sm mb-2">{t("language")}</p>
-              <div className="flex gap-4">
-                <button
-                  className={`px-3 py-1 rounded ${language === "es" ? "bg-primary text-white" : "bg-background"}`}
-                  onClick={() => setLanguage("es")}
-                >
-                  {t("spanish")}
-                </button>
-                <button
-                  className={`px-3 py-1 rounded ${language === "en" ? "bg-primary text-white" : "bg-background"}`}
-                  onClick={() => setLanguage("en")}
-                >
-                  {t("english")}
-                </button>
-              </div>
+              {t("about")}
+            </button>
+            <div className="pt-2 border-t border-border">
+              <LanguageSwitcher />
             </div>
-          </div>
-
-          <div className="mt-auto flex justify-center">
-            {mounted && (
-              <motion.button
-                onClick={toggleTheme}
-                className={`theme-toggle-btn ${theme === "dark" ? "dark" : "light"} p-3`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {theme === "dark" ? <Sun size={24} /> : <Moon size={24} />}
-              </motion.button>
-            )}
-          </div>
-        </div>
-      </motion.div>
-    </>
+          </nav>
+        </motion.div>
+      )}
+    </motion.header>
   )
 }
-
