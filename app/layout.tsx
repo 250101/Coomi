@@ -45,7 +45,6 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${playfair.variable} ${bebas.variable} font-montserrat`}
       >
-        {/* Wrap the app with both ThemeProvider and LanguageProvider */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
@@ -53,11 +52,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-import "./globals.css"
-
-import "./globals.css"
-
-
-
-import './globals.css'

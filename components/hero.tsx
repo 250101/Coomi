@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
-import Logo from "@/components/logo"
+import Link from "next/link"
 
 export default function Hero() {
   // Reference to the hero section element for mouse tracking
@@ -34,14 +34,6 @@ export default function Hero() {
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
-
-  // Scroll to content section when button is clicked
-  const scrollToContent = () => {
-    const contentSection = document.getElementById("browse")
-    if (contentSection) {
-      contentSection.scrollIntoView({ behavior: "smooth" })
-    }
-  }
 
   return (
     <section
@@ -93,26 +85,25 @@ export default function Hero() {
             {t("heroDescription")}
           </motion.p>
 
-          <motion.button
-            className="bg-primary text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-primary/80 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <motion.div
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            onClick={scrollToContent}
           >
-            {t("heroButton")}
-          </motion.button>
+            <Link
+              href="/recipes"
+              className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-full text-lg font-medium hover:bg-primary/80 transition-colors"
+            >
+              {t("heroButton")}
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* Animated down arrow to guide users to scroll down */}
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-        onClick={scrollToContent}
       >
         <ChevronDown size={32} className="text-foreground/70" />
       </motion.div>

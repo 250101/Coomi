@@ -135,12 +135,23 @@ const translations = {
     contact: "Contacto",
 
     // Footer
-    createdWith: "Creado con ❤️ por Martín Moore.",
+    createdWith: "Creado con \u2764\uFE0F por Mart\u00edn Moore.",
 
     // Language
     language: "Idioma",
-    spanish: "Español",
-    english: "Inglés",
+    spanish: "Espa\u00f1ol",
+    english: "Ingl\u00e9s",
+
+    // Navigation
+    home: "Inicio",
+    recipes: "Recetas",
+    locations: "Ubicaciones",
+    backToRecipes: "Volver a Recetas",
+    backToHome: "Volver al Inicio",
+    servings: "Porciones",
+    minutes: "min",
+    adjustedIngredients: "Ingredientes Ajustados",
+    quantityOf: "Cantidad de",
   },
   en: {
     // Navbar
@@ -218,12 +229,23 @@ const translations = {
     contact: "Contact",
 
     // Footer
-    createdWith: "Created with ❤️ by Martín Moore.",
+    createdWith: "Created with \u2764\uFE0F by Mart\u00edn Moore.",
 
     // Language
     language: "Language",
     spanish: "Spanish",
     english: "English",
+
+    // Navigation
+    home: "Home",
+    recipes: "Recipes",
+    locations: "Locations",
+    backToRecipes: "Back to Recipes",
+    backToHome: "Back to Home",
+    servings: "Servings",
+    minutes: "min",
+    adjustedIngredients: "Adjusted Ingredients",
+    quantityOf: "Quantity of",
   },
 }
 

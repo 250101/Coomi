@@ -1,5 +1,6 @@
 export interface Recipe {
   id: string
+  slug: string
   name: string
   categoryId: string
   description: string
@@ -16,9 +17,18 @@ export interface Recipe {
   steps: string[]
 }
 
+export function getRecipeBySlug(slug: string): Recipe | undefined {
+  return recipes.find((recipe) => recipe.slug === slug)
+}
+
+export function getAllRecipeSlugs(): string[] {
+  return recipes.map((recipe) => recipe.slug)
+}
+
 export const recipes: Recipe[] = [
   {
     id: "crema-boniato",
+    slug: "crema-de-boniato",
     name: "Crema de Boniato",
     categoryId: "salsas",
     description: "Una deliciosa crema de boniato, perfecta como base para platos, como dip o como aderezo.",
@@ -45,6 +55,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "manteca-miso",
+    slug: "manteca-miso",
     name: "Manteca Miso",
     categoryId: "salsas",
     description: "Una manteca aromatizada con miso, miel y limón, ideal para acompañar carnes, pescados o verduras.",
@@ -68,6 +79,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "crema-champinones",
+    slug: "crema-de-champinones",
     name: "Crema de Champiñones y Cebolla",
     categoryId: "salsas",
     description:
@@ -94,6 +106,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "croquetas-risotto",
+    slug: "croquetas-de-risotto",
     name: "Croquetas de Risotto",
     categoryId: "entradas",
     description: "Deliciosas croquetas hechas con risotto sobrante, perfectas como aperitivo o entrada.",
@@ -118,6 +131,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "croquetas-osobuco",
+    slug: "croquetas-de-osobuco",
     name: "Croquetas de Osobuco",
     categoryId: "entradas",
     description: "Croquetas cremosas hechas con osobuco desmenuzado y cebolla caramelizada, un aperitivo irresistible.",
@@ -148,6 +162,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "empanadas-carne",
+    slug: "empanadas-de-carne",
     name: "Empanadas de Carne",
     categoryId: "entradas",
     description: "Clásicas empanadas argentinas con un relleno jugoso de carne y verduras.",
@@ -181,6 +196,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "katsudon",
+    slug: "katsudon",
     name: "Katsudon",
     categoryId: "principales",
     description:
@@ -212,6 +228,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "katsu-curry",
+    slug: "katsu-curry",
     name: "Katsu Curry",
     categoryId: "principales",
     description: "Chuleta de cerdo empanada servida con una cremosa salsa de curry japonés sobre arroz.",
@@ -247,6 +264,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "risotto",
+    slug: "risotto",
     name: "Risotto",
     categoryId: "principales",
     description: "Un cremoso risotto con curry, pimentón ahumado y queso, perfecto para una cena especial.",
@@ -277,6 +295,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "lomo-boniato",
+    slug: "lomo-con-boniato",
     name: "Lomo con Mar de Boniato y Papas Rejilla",
     categoryId: "principales",
     description: "Medallones de lomo sobre una cremosa base de boniato, acompañados de crujientes papas rejilla.",
@@ -305,6 +324,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "tortilla",
+    slug: "tortilla-espanola",
     name: "Tortilla",
     categoryId: "principales",
     description:
@@ -332,7 +352,8 @@ export const recipes: Recipe[] = [
   },
   {
     id: "tiramisu",
-    name: "Tiramisú",
+    slug: "tiramisu",
+    name: "Tiramis\u00fa",
     categoryId: "postres",
     description:
       "El clásico postre italiano con capas de bizcochos de soletilla empapados en café y crema de mascarpone.",
@@ -361,6 +382,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "rolls-canela",
+    slug: "rolls-de-canela",
     name: "Rolls de Canela",
     categoryId: "postres",
     description: "Rolls de canela con un delicioso frosting de queso crema.",
@@ -397,6 +419,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "cookies",
+    slug: "cookies-de-chocolate",
     name: "Cookies de Chocolate",
     categoryId: "postres",
     description: "Deliciosas cookies con trozos de chocolate, perfectas para acompañar el café o como postre.",

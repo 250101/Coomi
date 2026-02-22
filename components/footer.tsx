@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
 import Logo from "@/components/logo"
+import Link from "next/link"
 
 export default function Footer() {
   // Get translation function from language context
@@ -19,7 +20,9 @@ export default function Footer() {
           transition={{ duration: 0.5 }}
         >
           <motion.div whileHover={{ scale: 1.05 }}>
-            <Logo />
+            <Link href="/">
+              <Logo />
+            </Link>
           </motion.div>
 
           <motion.p className="text-muted-foreground text-center md:text-right">
