@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Code, Heart, Coffee, Utensils, Github, Linkedin } from "lucide-react"
+import { Code, Heart, Coffee, Utensils, Github, Linkedin, Mail } from "lucide-react"
 
 export default function AboutSection() {
   return (
@@ -31,11 +31,11 @@ export default function AboutSection() {
                 transition={{ duration: 0.5, delay: 0.3 }}
               />
             </motion.h2>
-            <div className="ml-6 h-px bg-border flex-grow"></div>
+            <div className="ml-6 h-px bg-border flex-grow" />
           </div>
 
           <div className="space-y-12">
-            {/* Inspiration Section */}
+            {/* Inspiración */}
             <div className="bg-card rounded-lg p-8 shadow-md">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -43,20 +43,20 @@ export default function AboutSection() {
                 </div>
                 <h3 className="text-2xl font-display">¿Cómo nació la idea de Coomi?</h3>
               </div>
-
               <p className="text-muted-foreground mb-4">
-              La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025 decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o incluso crear las suyas propias y compartirlas entre ellos.
-A medida que fui desarrollando el proyecto, se me ocurrieron nuevas ideas: un foro para la comunidad, tips de cocina, una calculadora de ingredientes según el número de personas, y muchas otras funciones que todavía están por venir.
-En principio, Coomi es una página interactiva pensada para que mis seres queridos tengan un acceso fácil y ordenado a mis recetas. Pero no tengo dudas de que puede crecer mucho más y llegar a muchísima gente que disfrute de la cocina tanto como nosotros.
+                La idea de Coomi surgió porque frecuentemente le cocinaba a mis amigos y a mi familia. En abril de 2025
+                decidí irme a vivir a España, y quería dejar algo que les permitiera seguir haciendo mis recetas, o
+                incluso crear las suyas propias y compartirlas entre ellos.
               </p>
               <p className="text-muted-foreground">
-                Este proyecto fusiona mi interés por la gastronomía con mi curiosidad en desarrollo web, creando una
-                plataforma donde las recetas tradicionales y caseras pueden ser preservadas y compartidas con una
-                interfaz moderna y atractiva.
+                A medida que fui desarrollando el proyecto, se me ocurrieron nuevas ideas: un foro para la comunidad,
+                tips de cocina, una calculadora de ingredientes según el número de personas, y muchas otras funciones
+                que todavía están por venir. Coomi fusiona mi interés por la gastronomía con mi curiosidad en
+                desarrollo web.
               </p>
             </div>
 
-            {/* Technologies Section */}
+            {/* Tecnologías */}
             <div className="bg-card rounded-lg p-8 shadow-md">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -64,63 +64,45 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
                 </div>
                 <h3 className="text-2xl font-display">Tecnologías Utilizadas</h3>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h4 className="font-medium text-lg mb-2">Frontend</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Next.js 14 (App Router)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>React 18</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>TypeScript</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Tailwind CSS</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Framer Motion</span>
-                    </li>
+                    {[
+                      "Next.js 16 (App Router)",
+                      "React 19",
+                      "TypeScript",
+                      "Tailwind CSS",
+                      "Framer Motion",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
-
                 <div>
                   <h4 className="font-medium text-lg mb-2">Características</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Modo oscuro/claro</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Diseño responsivo</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Animaciones fluidas</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Búsqueda por ingredientes</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Calculadora de porciones</span>
-                    </li>
+                    {[
+                      "Modo oscuro/claro",
+                      "Diseño responsivo",
+                      "Animaciones fluidas",
+                      "Búsqueda por ingredientes",
+                      "Calculadora de porciones",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
             </div>
 
-            {/* Personal Reflection */}
+            {/* Reflexión */}
             <div className="bg-card rounded-lg p-8 shadow-md">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -128,27 +110,22 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
                 </div>
                 <h3 className="text-2xl font-display">Reflexión Personal</h3>
               </div>
-
               <p className="text-muted-foreground mb-4">
-                Desarrollar Coomi ha sido un viaje que combina: la programación y la cocina.
-                Este proyecto representa la intersección perfecta entre mi constante aprendisaje de nuevas herramientas como desarrollador y mi amor
-                por la gastronomía.
+                Desarrollar Coomi ha sido un viaje que combina la programación y la cocina. Este proyecto representa
+                la intersección perfecta entre mi constante aprendizaje de nuevas herramientas como desarrollador y mi
+                amor por la gastronomía.
               </p>
-
               <p className="text-muted-foreground mb-4">
                 Cada componente fue diseñado pensando en la experiencia del usuario, asegurando que las recetas sean
-                fáciles de encontrar, entender y adaptar. Las animaciones sutiles y los efectos visuales buscan evocar
-                la emoción y creatividad que siento al cocinar.
+                fáciles de encontrar, entender y adaptar.
               </p>
-
               <p className="text-muted-foreground">
-                Este proyecto es más que un simple recetario digital; es un testimonio de cómo la tecnología puede
-                preservar tradiciones culinarias y facilitar su transmisión a nuevas generaciones, manteniendo viva la
-                esencia de compartir comida con seres queridos.
+                Este proyecto es más que un simple recetario digital — es un testimonio de cómo la tecnología puede
+                preservar tradiciones culinarias y facilitar su transmisión a nuevas generaciones.
               </p>
             </div>
 
-            {/* Future Plans */}
+            {/* Planes futuros */}
             <div className="bg-card rounded-lg p-8 shadow-md">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -156,63 +133,48 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
                 </div>
                 <h3 className="text-2xl font-display">Planes Futuros</h3>
               </div>
-
-              <p className="text-muted-foreground mb-6">
-                Coomi continúa evolucionando con nuevas características planificadas:
-              </p>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-background p-4 rounded-md">
                   <h4 className="font-medium text-lg mb-2">Funcionalidades</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Más recetas</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Sistema de autenticación de usuarios</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Guardado de recetas favoritas</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Creación de listas de compras</span>
-                    </li>
+                    {[
+                      "Más recetas",
+                      "Sistema de autenticación",
+                      "Guardado de favoritos",
+                      "Lista de compras",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
-
                 <div className="bg-background p-4 rounded-md">
                   <h4 className="font-medium text-lg mb-2">Contenido</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Expansión de categorías de recetas</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Videos instructivos</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-primary rounded-full"></span>
-                      <span>Sección de técnicas culinarias</span>
-                    </li>
+                    {[
+                      "Más categorías de recetas",
+                      "Videos instructivos",
+                      "Sección de técnicas culinarias",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
             </div>
 
-            {/* Connect Section */}
+            {/* Contacto */}
             <div className="bg-card rounded-lg p-8 shadow-md">
               <h3 className="text-2xl font-display mb-6">Conectemos</h3>
-
               <p className="text-muted-foreground mb-6">
-                Si tienes sugerencias o simplemente quieres compartir tu experiencia con
-                Coomi, me encantaría saber de ti:
+                Si tenés sugerencias o simplemente querés compartir tu experiencia con Coomi, me encantaría saber de
+                vos:
               </p>
-
               <div className="flex flex-wrap gap-4">
                 <a
                   href="https://github.com/250101"
@@ -223,7 +185,6 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
                   <Github size={20} />
                   <span>GitHub</span>
                 </a>
-
                 <a
                   href="https://www.linkedin.com/in/mart%C3%ADn-moore-750b701b0/"
                   target="_blank"
@@ -233,11 +194,11 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
                   <Linkedin size={20} />
                   <span>LinkedIn</span>
                 </a>
-
                 <a
-                  href="mailto:your.email@example.com"
+                  href="mailto:martinmoore@example.com"
                   className="flex items-center gap-2 bg-primary text-white hover:bg-primary/80 transition-colors px-4 py-2 rounded-md"
                 >
+                  <Mail size={20} />
                   <span>Contacto</span>
                 </a>
               </div>
@@ -248,4 +209,3 @@ En principio, Coomi es una página interactiva pensada para que mis seres querid
     </section>
   )
 }
-

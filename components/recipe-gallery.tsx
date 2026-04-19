@@ -1,6 +1,8 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useRef, useState, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronLeft, ChevronRight, Clock, Users } from "lucide-react"
 import type { Recipe } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -9,73 +11,142 @@ interface RecipeGalleryProps {
   openRecipeModal: (recipe: Recipe) => void
 }
 
-/**
- * RecipeGallery component displays all recipes organized by categories
- * It renders a grid of recipe cards for each category
- */
 export default function RecipeGallery({ recipes, openRecipeModal }: RecipeGalleryProps) {
-  // Get translation function from language context
   const { t } = useLanguage()
 
-  // Define categories for organizing recipes
-  // Each category has an id that matches the categoryId in recipe data
   const categories = [
-    { id: "salsas", name: t("saucesCream") },
-    { id: "entradas", name: t("starters") },
-    { id: "principales", name: t("mainDishes") },
-    { id: "postres", name: t("desserts") },
+    { id: "salsas",      name: t("saucesCream") },
+    { id: "entradas",    name: t("starters")    },
+    { id: "principales", name: t("mainDishes")  },
+    { id: "postres",     name: t("desserts")    },
   ]
 
   return (
-    <div>
+    <div className="space-y-16">
       {categories.map((category) => {
-        // Filter recipes by category to display only recipes in the current category
-        const categoryRecipes = recipes.filter((recipe) => recipe.categoryId === category.id)
-
-        // Skip rendering empty categories
+        const categoryRecipes = recipes.filter((r) => r.categoryId === category.id)
         if (categoryRecipes.length === 0) return null
-
         return (
-          <section key={category.id} className="mb-24" id={category.id}>
-            <div className="flex items-center mb-12">
-              <motion.h2
-                className="text-4xl font-display relative"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                {category.name}
-                {/* Animated underline for category heading */}
-                <motion.span
-                  className="absolute -bottom-2 left-0 h-1 bg-primary"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "60px" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                />
-              </motion.h2>
-              <div className="ml-6 h-px bg-border flex-grow"></div>
-            </div>
-
-            {/* Grid layout for recipe cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {categoryRecipes.map((recipe, index) => (
-                <motion.div
-                  key={recipe.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <RecipeCard recipe={recipe} openRecipeModal={openRecipeModal} />
-                </motion.div>
-              ))}
-            </div>
-          </section>
+          <CategoryRow
+            key={category.id}
+            id={category.id}
+            name={category.name}
+            recipes={categoryRecipes}
+            openRecipeModal={openRecipeModal}
+          />
         )
       })}
     </div>
+  )
+}
+
+interface CategoryRowProps {
+  id: string
+  name: string
+  recipes: Recipe[]
+  openRecipeModal: (recipe: Recipe) => void
+}
+
+function CategoryRow({ id, name, recipes, openRecipeModal }: CategoryRowProps) {
+  const rowRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft,  setCanScrollLeft]  = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const updateScrollState = useCallback(() => {
+    const el = rowRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 8)
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8)
+  }, [])
+
+  const scroll = (dir: "left" | "right") => {
+    rowRef.current?.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" })
+    setTimeout(updateScrollState, 350)
+  }
+
+  return (
+    <section id={id}>
+      {/* Header de categoría */}
+      <div className="flex items-center justify-between mb-6 px-1">
+        <motion.div
+          className="flex items-center gap-4"
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+        >
+          <h2 className="text-3xl font-display relative">
+            {name}
+            <motion.span
+              className="absolute -bottom-1 left-0 h-0.5 bg-primary"
+              initial={{ width: 0 }}
+              whileInView={{ width: "48px" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+            />
+          </h2>
+          <span className="text-muted-foreground text-sm">
+            {recipes.length} {recipes.length === 1 ? "receta" : "recetas"}
+          </span>
+        </motion.div>
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => scroll("left")}
+            disabled={!canScrollLeft}
+            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+            aria-label="Anterior"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            disabled={!canScrollRight}
+            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+            aria-label="Siguiente"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Carril scrolleable */}
+      <div className="relative">
+        <div
+          className="absolute left-0 top-0 bottom-0 w-10 z-10 pointer-events-none transition-opacity duration-300"
+          style={{
+            background: "linear-gradient(to right, hsl(var(--background)), transparent)",
+            opacity: canScrollLeft ? 1 : 0,
+          }}
+        />
+        <div
+          className="absolute right-0 top-0 bottom-0 w-10 z-10 pointer-events-none transition-opacity duration-300"
+          style={{
+            background: "linear-gradient(to left, hsl(var(--background)), transparent)",
+            opacity: canScrollRight ? 1 : 0,
+          }}
+        />
+        <div
+          ref={rowRef}
+          onScroll={updateScrollState}
+          className="flex gap-4 overflow-x-auto pb-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {recipes.map((recipe, index) => (
+            <motion.div
+              key={recipe.id}
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.07 }}
+              style={{ flexShrink: 0 }}
+            >
+              <RecipeCard recipe={recipe} openRecipeModal={openRecipeModal} />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -84,81 +155,120 @@ interface RecipeCardProps {
   openRecipeModal: (recipe: Recipe) => void
 }
 
-/**
- * RecipeCard component displays a single recipe card
- * It shows the recipe image, title, metadata, and description
- */
 function RecipeCard({ recipe, openRecipeModal }: RecipeCardProps) {
-  // Get translation function from language context
-  const { t } = useLanguage()
-
-  // Simplificar el manejador de clics para evitar problemas
-  const handleCardClick = () => {
-    openRecipeModal(recipe)
-  }
+  const [hovered, setHovered] = useState(false)
 
   return (
     <div
-      className="recipe-card cursor-pointer"
-      onClick={handleCardClick}
-      role="button"
-      tabIndex={0}
-      aria-label={`View recipe for ${recipe.name}`}
+      className="relative rounded-lg overflow-hidden bg-card shadow-lg"
+      style={{ width: 280, height: 200, flexShrink: 0 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <div className="glitch-container">
-        {/* Recipe image with glitch effect */}
-        <div
-          className="recipe-image glitch-image"
-          style={{
-            backgroundImage: `url(${recipe.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center 40%",
-            height: "264px",
-          }}
-        />
+      {/* Imagen con zoom en hover */}
+      <div
+        className="absolute inset-0 transition-transform duration-500 ease-out"
+        style={{
+          backgroundImage: `url(${recipe.image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          transform: hovered ? "scale(1.06)" : "scale(1)",
+        }}
+      />
 
-        {/* Recipe tags displayed as badges */}
-        {recipe.tags && recipe.tags.length > 0 && (
-          <div className="absolute top-4 right-4 z-10 flex flex-wrap gap-2 justify-end">
-            {recipe.tags.map((tag, index) => (
-              <span key={index} className="bg-primary/80 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      {/* Gradiente base siempre visible */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
 
-      <div className="recipe-content">
-        <h3 className="recipe-title">{recipe.name}</h3>
-
-        {/* Recipe metadata (time and servings) */}
-        <div className="recipe-meta">
-          <div className="flex items-center gap-1.5">
-            <span className="text-primary">⏱️</span>
-            <span>{recipe.time} min</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-primary">👥</span>
-            <span>
-              {recipe.servings} {recipe.servingType || "Porciones"}
+      {/* Tags */}
+      {recipe.tags && recipe.tags.length > 0 && (
+        <div className="absolute top-3 right-3 flex flex-wrap gap-1 justify-end z-10">
+          {recipe.tags.slice(0, 2).map((tag) => (
+            <span
+              key={tag}
+              className="text-[10px] font-medium px-2 py-0.5 rounded-sm"
+              style={{ background: "hsl(var(--primary)/0.85)", color: "white" }}
+            >
+              {tag}
             </span>
-          </div>
+          ))}
         </div>
+      )}
 
-        <p className="recipe-description">{recipe.description}</p>
-
-        <div className="recipe-footer">
-          <button
-            className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/80 transition-colors"
-            onClick={handleCardClick}
-            aria-label={`View recipe for ${recipe.name}`}
-          >
-            {t("viewRecipe")}
-          </button>
+      {/* Info base: nombre + meta (visible siempre) */}
+      <div
+        className="absolute bottom-0 left-0 right-0 p-4 z-10 transition-opacity duration-200"
+        style={{ opacity: hovered ? 0 : 1 }}
+      >
+        <h3 className="text-white font-display text-lg leading-tight mb-1">
+          {recipe.name}
+        </h3>
+        <div className="flex items-center gap-3 text-white/65 text-xs">
+          <span className="flex items-center gap-1">
+            <Clock size={11} />
+            {recipe.time} min
+          </span>
+          <span className="flex items-center gap-1">
+            <Users size={11} />
+            {recipe.servings} {recipe.servingType || "porciones"}
+          </span>
         </div>
       </div>
+
+      {/* Overlay hover: descripción + botón */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            className="absolute inset-0 z-20 flex flex-col justify-end p-4"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.15) 100%)",
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+          >
+            <h3 className="text-white font-display text-lg leading-tight mb-1">
+              {recipe.name}
+            </h3>
+
+            <div className="flex items-center gap-3 text-white/60 text-xs mb-2">
+              <span className="flex items-center gap-1">
+                <Clock size={11} />
+                {recipe.time} min
+              </span>
+              <span className="flex items-center gap-1">
+                <Users size={11} />
+                {recipe.servings} {recipe.servingType || "porciones"}
+              </span>
+            </div>
+
+            {/* Descripción */}
+            <motion.p
+              className="text-white/75 text-xs leading-relaxed mb-3 line-clamp-3"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, delay: 0.04 }}
+            >
+              {recipe.description}
+            </motion.p>
+
+            {/* Botón */}
+            <motion.button
+              className="w-full py-1.5 rounded-md text-sm font-medium"
+              style={{ background: "hsl(var(--primary))", color: "white" }}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, delay: 0.08 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => openRecipeModal(recipe)}
+            >
+              Ver receta
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
-
