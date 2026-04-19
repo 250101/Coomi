@@ -3,13 +3,12 @@
 import { useRef, useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, Clock, Users } from "lucide-react"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 import type { Recipe } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
 
 interface RecipeGalleryProps {
   recipes: Recipe[]
-  // Mantenemos la prop para no romper la interfaz aunque ya no la usamos
   openRecipeModal?: (recipe: Recipe) => void
 }
 
@@ -148,13 +147,10 @@ function CategoryRow({ id, name, recipes }: CategoryRowProps) {
 
 function RecipeCard({ recipe }: { recipe: Recipe }) {
   const [hovered, setHovered] = useState(false)
-  const router = useRouter()
-
-  const navigate = () => router.push(`/recetas/${recipe.id}`)
 
   return (
     <div
-      className="relative rounded-lg overflow-hidden bg-card shadow-lg cursor-pointer"
+      className="relative rounded-lg overflow-hidden bg-card shadow-lg"
       style={{ width: 280, height: 200, flexShrink: 0 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -200,12 +196,15 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
         </div>
       </div>
 
-      {/* Hover overlay */}
+      {/* Hover overlay con Link */}
       <AnimatePresence>
         {hovered && (
           <motion.div
             className="absolute inset-0 z-20 flex flex-col justify-end p-4"
-            style={{ background: "linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.15) 100%)" }}
+            style={{
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.15) 100%)",
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -224,18 +223,15 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
             >
               {recipe.description}
             </motion.p>
-            <motion.button
-              className="w-full py-1.5 rounded-md text-sm font-medium"
+
+            {/* Link en vez de button+router.push */}
+            <Link
+              href={`/recetas/${recipe.id}`}
+              className="w-full py-1.5 rounded-md text-sm font-medium text-center block transition-opacity hover:opacity-90"
               style={{ background: "hsl(var(--primary))", color: "white" }}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.18, delay: 0.08 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={navigate}
             >
               Ver receta
-            </motion.button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
