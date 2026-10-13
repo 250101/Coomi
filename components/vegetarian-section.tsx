@@ -4,17 +4,9 @@ import { motion } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
 import { Leaf } from "lucide-react"
 
-const steps = [
-  "Pelar una berenjena sin sacarle el tallo.",
-  "Untar la berenjena con aceite de oliva, pimienta y un poco de sal.",
-  "Envolverla en aluminio y dejarla en el horno a fuego fuerte por 15-20 minutos.",
-  "Una vez que la sacás, la berenjena tiene que estar blanda como para aplastarla de a poquito, pero no se tiene que deshacer.",
-  "Cuando la tengas de un ancho considerado para una milanesa (1-1.5 cm), pasala por harina, después por huevo y finalmente por panko.",
-  "Freíla en aceite abundante y caliente, sacala cuando esté dorada, y rallale limón apenas sale.",
-]
-
 export default function VegetarianSection() {
   const { t } = useLanguage()
+  const steps = t("eggplantSteps").split("|")
 
   return (
     <section className="py-32 relative" id="vegetarian">
@@ -35,7 +27,7 @@ export default function VegetarianSection() {
               <Leaf size={16} className="text-primary" />
             </div>
             <span className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-              Sin carne
+              {t("meatFree")}
             </span>
           </div>
 
@@ -97,9 +89,7 @@ export default function VegetarianSection() {
         >
           <h3 className="text-xl font-display mb-4 text-foreground">{t("glutenFreeOption")}</h3>
           <p className="text-muted-foreground leading-relaxed text-sm">
-            Podés cambiar el panko por panko sin TACC. En este caso, en vez de pasar el producto crudo en la harina,
-            pasalo primero por el panko sin TACC, luego por el huevo y por último el panko sin TACC nuevamente.
-            Recordá usar un aceite renovado para no generar contaminación cruzada.
+            {t("glutenFreeDescription")}
           </p>
         </motion.div>
       </div>

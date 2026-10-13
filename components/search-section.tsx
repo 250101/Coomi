@@ -39,13 +39,17 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
 
   const removeIngredient = useCallback((ingredient: string) => {
     setSelectedIngredients((prev) => prev.filter((i) => i !== ingredient))
+    setHasSearched(false)
+    setSearchResults([])
   }, [])
 
   const searchRecipes = useCallback(() => {
     if (selectedIngredients.length === 0) return
     const results = recipes.filter((recipe) => {
       const recipeIngredients = recipe.ingredients.map((i) => i.name.toLowerCase())
-      return selectedIngredients.some((i) => recipeIngredients.includes(i))
+      return selectedIngredients.every((selected) =>
+        recipeIngredients.some((ingredient) => ingredient.includes(selected))
+      )
     })
     setSearchResults(results)
     setHasSearched(true)
@@ -96,15 +100,21 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
             setSearchTerm(e.target.value)
             setShowSuggestions(e.target.value.length >= 2)
           }}
+          onFocus={() => setShowSuggestions(searchTerm.length >= 2)}
         />
         <span className="search-icon"><Search size={20} /></span>
 
         {suggestions && filteredIngredients.length > 0 && (
           <div className="search-suggestions" style={{ display: "block" }}>
             {filteredIngredients.slice(0, 8).map((ingredient, i) => (
-              <div key={i} className="search-suggestion-item" onClick={() => addIngredient(ingredient)}>
+              <button
+                key={i}
+                type="button"
+                className="search-suggestion-item block w-full text-left"
+                onClick={() => addIngredient(ingredient)}
+              >
                 {ingredient}
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -122,7 +132,12 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
               transition={{ delay: i * 0.05 }}
             >
               {ingredient}
-              <button className="ml-2 text-white/80 hover:text-white" onClick={() => removeIngredient(ingredient)}>
+              <button
+                type="button"
+                className="ml-2 text-white/80 hover:text-white"
+                onClick={() => removeIngredient(ingredient)}
+                aria-label={`${t("removeIngredient")} ${ingredient}`}
+              >
                 <X size={16} />
               </button>
             </motion.div>
@@ -181,7 +196,7 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
                     <h3 className="text-white font-display text-lg mb-1">{recipe.name}</h3>
                     <div className="flex gap-3 text-white/60 text-xs">
                       <span className="flex items-center gap-1"><Clock size={11} />{recipe.time} min</span>
-                      <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || "porciones"}</span>
+                      <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || t("servings")}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -192,7 +207,11 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
               <p className="text-muted-foreground mb-4">{t("tryOther")}</p>
               <button
                 className="bg-muted text-foreground px-4 py-2 rounded-md text-sm hover:bg-muted/80 transition-colors"
-                onClick={() => setSelectedIngredients([])}
+                onClick={() => {
+                  setSelectedIngredients([])
+                  setSearchResults([])
+                  setHasSearched(false)
+                }}
               >
                 {t("clearSearch")}
               </button>

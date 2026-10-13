@@ -1,10 +1,11 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { ArrowLeft, Clock, Users, Minus, Plus } from "lucide-react"
-import { recipes } from "@/data/recipes"
+import { getRecipes } from "@/data/recipes"
+import { useLanguage } from "@/contexts/language-context"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -14,6 +15,8 @@ interface Props {
 export default function RecipePage({ params }: Props) {
   const { id } = use(params)
   const router = useRouter()
+  const { language, t } = useLanguage()
+  const recipes = getRecipes(language)
   const recipe = recipes.find((r) => r.id === id)
 
   if (!recipe) notFound()
@@ -33,12 +36,12 @@ export default function RecipePage({ params }: Props) {
   }
 
   // Swipe handler para mobile
-  let touchStartY = 0
+  const touchStartY = useRef(0)
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY = e.touches[0].clientY
+    touchStartY.current = e.touches[0].clientY
   }
   const handleTouchEnd = (e: React.TouchEvent) => {
-    const delta = e.changedTouches[0].clientY - touchStartY
+    const delta = e.changedTouches[0].clientY - touchStartY.current
     if (delta > 80) router.back()
   }
 
@@ -81,13 +84,13 @@ export default function RecipePage({ params }: Props) {
             className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm"
           >
             <ArrowLeft size={18} />
-            <span className="hidden md:inline">Volver</span>
+            <span className="hidden md:inline">{t("back")}</span>
           </button>
 
           <button
             onClick={() => router.back()}
             className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:border-white/50 transition-all md:flex hidden"
-            aria-label="Cerrar"
+            aria-label={t("close")}
           >
             ✕
           </button>
@@ -137,11 +140,11 @@ export default function RecipePage({ params }: Props) {
           >
             <span className="flex items-center gap-2">
               <Clock size={16} className="text-primary" />
-              {recipe.time} minutos
+              {recipe.time} {t("minutes")}
             </span>
             <span className="flex items-center gap-2">
               <Users size={16} className="text-primary" />
-              {recipe.servings} {recipe.servingType || "porciones"}
+              {recipe.servings} {recipe.servingType || t("servings")}
             </span>
           </motion.div>
         </div>
@@ -159,11 +162,11 @@ export default function RecipePage({ params }: Props) {
             <div className="mb-12 p-6 border border-border rounded-2xl">
               <div className="flex items-center justify-between mb-5">
                 <div>
-                  <h3 className="font-display text-xl">Calculadora</h3>
+                  <h3 className="font-display text-xl">{t("calculator")}</h3>
                   <p className="text-muted-foreground text-sm mt-0.5">
-                    Ajustá las cantidades para{" "}
+                    {t("adjustQuantitiesFor")}{" "}
                     <span className="text-primary font-medium">{servings}</span>{" "}
-                    {(recipe.servingType || "porciones").toLowerCase()}
+                    {(recipe.servingType || t("servings")).toLowerCase()}
                   </p>
                 </div>
 
@@ -172,6 +175,7 @@ export default function RecipePage({ params }: Props) {
                   <button
                     onClick={() => setServings((s) => Math.max(1, s - 1))}
                     disabled={servings <= 1}
+                    aria-label={t("decreaseServings")}
                     className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-25"
                   >
                     <Minus size={16} />
@@ -181,6 +185,7 @@ export default function RecipePage({ params }: Props) {
                   </span>
                   <button
                     onClick={() => setServings((s) => s + 1)}
+                    aria-label={t("increaseServings")}
                     className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all"
                   >
                     <Plus size={16} />
@@ -216,7 +221,7 @@ export default function RecipePage({ params }: Props) {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {tab === "ingredientes" ? "Ingredientes" : "Preparación"}
+                  {tab === "ingredientes" ? t("ingredients") : t("preparation")}
                   {activeSection === tab && (
                     <motion.span
                       className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"

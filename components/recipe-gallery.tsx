@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight, Clock, Users } from "lucide-react"
 import Link from "next/link"
 import type { Recipe } from "@/data/recipes"
@@ -47,6 +47,7 @@ interface CategoryRowProps {
 }
 
 function CategoryRow({ id, name, recipes }: CategoryRowProps) {
+  const { t } = useLanguage()
   const rowRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft,  setCanScrollLeft]  = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
@@ -84,21 +85,25 @@ function CategoryRow({ id, name, recipes }: CategoryRowProps) {
             />
           </h2>
           <span className="text-muted-foreground text-sm">
-            {recipes.length} {recipes.length === 1 ? "receta" : "recetas"}
+            {recipes.length} {recipes.length === 1 ? t("recipeLower") : t("recipesLower")}
           </span>
         </motion.div>
 
         <div className="flex gap-2">
           <button
+            type="button"
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
+            aria-label={`${t("previous")}: ${name}`}
             className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-20 disabled:cursor-not-allowed"
           >
             <ChevronLeft size={18} />
           </button>
           <button
+            type="button"
             onClick={() => scroll("right")}
             disabled={!canScrollRight}
+            aria-label={`${t("next")}: ${name}`}
             className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-20 disabled:cursor-not-allowed"
           >
             <ChevronRight size={18} />
@@ -147,10 +152,13 @@ function CategoryRow({ id, name, recipes }: CategoryRowProps) {
 
 function RecipeCard({ recipe }: { recipe: Recipe }) {
   const [hovered, setHovered] = useState(false)
+  const { t } = useLanguage()
 
   return (
-    <div
-      className="relative rounded-lg overflow-hidden bg-card shadow-lg"
+    <Link
+      href={`/recetas/${recipe.id}`}
+      aria-label={`${t("viewRecipe")}: ${recipe.name}`}
+      className="relative block rounded-lg overflow-hidden bg-card shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       style={{ width: 280, height: 200, flexShrink: 0 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -192,13 +200,12 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
         <h3 className="text-white font-display text-lg leading-tight mb-1">{recipe.name}</h3>
         <div className="flex items-center gap-3 text-white/65 text-xs">
           <span className="flex items-center gap-1"><Clock size={11} />{recipe.time} min</span>
-          <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || "porciones"}</span>
+          <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || t("servings")}</span>
         </div>
       </div>
 
-      {/* Hover overlay con Link */}
-      <AnimatePresence>
-        {hovered && (
+      {/* Detalle visible con hover, foco de teclado o al tocar la tarjeta */}
+      {hovered && (
           <motion.div
             className="absolute inset-0 z-20 flex flex-col justify-end p-4"
             style={{
@@ -213,7 +220,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
             <h3 className="text-white font-display text-lg leading-tight mb-1">{recipe.name}</h3>
             <div className="flex items-center gap-3 text-white/60 text-xs mb-2">
               <span className="flex items-center gap-1"><Clock size={11} />{recipe.time} min</span>
-              <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || "porciones"}</span>
+              <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || t("servings")}</span>
             </div>
             <motion.p
               className="text-white/75 text-xs leading-relaxed mb-3 line-clamp-3"
@@ -224,17 +231,14 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
               {recipe.description}
             </motion.p>
 
-            {/* Link en vez de button+router.push */}
-            <Link
-              href={`/recetas/${recipe.id}`}
-              className="w-full py-1.5 rounded-md text-sm font-medium text-center block transition-opacity hover:opacity-90"
+            <span
+              className="w-full py-1.5 rounded-md text-sm font-medium text-center block"
               style={{ background: "hsl(var(--primary))", color: "white" }}
             >
-              Ver receta
-            </Link>
+              {t("viewRecipe")}
+            </span>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      )}
+    </Link>
   )
 }

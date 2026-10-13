@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useCallback, useContext, useEffect, useSyncExternalStore, type ReactNode } from "react"
 
 // Define available languages in the application
 export type Language = "es" | "en"
@@ -30,20 +30,30 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
-  // Initialize language from localStorage or default to Spanish
-  // This allows the user's language preference to persist across sessions
-  const [language, setLanguage] = useState<Language>(() => {
-    // Check if we're in the browser environment to avoid SSR issues
-    if (typeof window !== "undefined") {
-      const savedLanguage = localStorage.getItem("language") as Language
-      return savedLanguage || "es"
-    }
-    return "es"
-  })
+  const language = useSyncExternalStore(
+    (onChange) => {
+      window.addEventListener("storage", onChange)
+      window.addEventListener("language-change", onChange)
+      return () => {
+        window.removeEventListener("storage", onChange)
+        window.removeEventListener("language-change", onChange)
+      }
+    },
+    () => {
+      const savedLanguage = localStorage.getItem("language")
+      return savedLanguage === "en" ? "en" : "es"
+    },
+    () => "es" as Language,
+  )
+
+  const setLanguage = useCallback((nextLanguage: Language) => {
+    localStorage.setItem("language", nextLanguage)
+    window.dispatchEvent(new Event("language-change"))
+  }, [])
 
   // Save language preference to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem("language", language)
+    document.documentElement.lang = language
   }, [language])
 
   // Translation function that looks up keys in the translations object
@@ -86,6 +96,7 @@ const translations = {
     noResults: "No encontramos recetas con esos ingredientes",
     tryOther: "Prueba con otros ingredientes o menos específicos.",
     clearSearch: "Limpiar búsqueda",
+    removeIngredient: "Quitar ingrediente",
 
     // Vegetarian
     vegetarianTitle: "Opciones Vegetarianas",
@@ -93,6 +104,9 @@ const translations = {
       "¿Buscás alternativas sin carne? Podés reemplazar la carne en muchas de nuestras recetas con opciones vegetarianas. Una de nuestras favoritas es el Katsu de Berenjena Ahumada, que podés usar en lugar de la carne en recetas como el Katsudon o Katsu Curry.",
     eggplantKatsu: "Katsu de Berenjena Ahumada",
     glutenFreeOption: "Opción Sin TACC",
+    meatFree: "Sin carne",
+    eggplantSteps: "Pelar una berenjena sin sacarle el tallo.|Untar la berenjena con aceite de oliva, pimienta y un poco de sal.|Envolverla en aluminio y dejarla en el horno a fuego fuerte por 15-20 minutos.|Una vez que la sacás, la berenjena tiene que estar blanda como para aplastarla de a poquito, pero no se tiene que deshacer.|Cuando tenga 1-1,5 cm de ancho, pasala por harina, después por huevo y finalmente por panko.|Freíla en aceite abundante y caliente; cuando esté dorada, sacala y rallale limón.",
+    glutenFreeDescription: "Podés cambiar el panko por panko sin TACC. Pasá el producto primero por panko sin TACC, luego por huevo y por último por panko nuevamente. Usá aceite renovado para evitar la contaminación cruzada.",
 
     // Recipe Modal
     recipe: "Receta",
@@ -110,6 +124,9 @@ const translations = {
 
     // Tips
     cookingTips: "Tips de Cocina",
+    cooking: "Cocina",
+    tipTitles: "Freír correctamente|Escurrir sin perder crocancia|Risotto creativo|Caramelizar cebollas|Salsas versátiles|Preparación anticipada",
+    tipBodies: "Siempre freí en abundante aceite: así el producto se cocina parejo, queda más crujiente y absorbe menos grasa.|Escurrí los fritos sobre una rejilla en vez de papel absorbente para conservar la crocancia. Aprovechá ese momento para agregar ralladura de limón y sal.|Usá el risotto como espacio para experimentar: probá diferentes sabores y terminaciones, como crema de champiñones o de boniato.|Cociná las cebollas en pluma a fuego muy bajo con manteca y sal durante 30-40 minutos. La paciencia evita que se quemen y permite que se caramelicen.|Las salsas y cremas pueden funcionar como base, dip o aderezo. Combiná preparaciones para descubrir sabores nuevos.|Muchas salsas, cremas y rellenos pueden prepararse con anticipación y suelen mejorar después de un día en la heladera.",
 
     // Forum
     recipesForum: "Foro de Recetas",
@@ -124,6 +141,9 @@ const translations = {
     noComments: "No hay comentarios aún. ¡Sé el primero en comentar!",
     recipe_optional: "Receta (opcional)",
     general: "General (sin receta específica)",
+    community: "Comunidad",
+    deleteComment: "Eliminar comentario",
+    commentsUnavailable: "No pudimos conectar con el foro. Intentá de nuevo en unos instantes.",
 
     // About
     aboutProject: "Sobre el Proyecto",
@@ -133,6 +153,17 @@ const translations = {
     futurePlans: "Planes Futuros",
     connect: "Conectemos",
     contact: "Contacto",
+    aboutIdeaTitle: "¿Cómo nació la idea de Coomi?",
+    aboutIdeaOne: "Coomi nació porque cocinaba seguido para mis amigos y mi familia. Cuando decidí mudarme a España en abril de 2025, quise dejarles una forma de seguir preparando mis recetas, crear las suyas y compartirlas.",
+    aboutIdeaTwo: "El proyecto fue creciendo con un foro, consejos de cocina, una calculadora de ingredientes y otras funciones por venir. Coomi une mi interés por la gastronomía con mi curiosidad por el desarrollo web.",
+    features: "Características", featureItems: "Modo oscuro/claro|Diseño responsivo|Animaciones fluidas|Búsqueda por ingredientes|Calculadora de porciones",
+    reflectionOne: "Desarrollar Coomi ha sido un viaje que combina programación y cocina: la intersección entre mi aprendizaje como desarrollador y mi amor por la gastronomía.",
+    reflectionTwo: "Cada componente fue diseñado pensando en que las recetas sean fáciles de encontrar, entender y adaptar.",
+    reflectionThree: "Es más que un recetario digital: muestra cómo la tecnología puede preservar tradiciones culinarias y transmitirlas a nuevas generaciones.",
+    functionality: "Funcionalidades", content: "Contenido",
+    functionalityItems: "Más recetas|Sistema de autenticación|Guardado de favoritos|Lista de compras",
+    contentItems: "Más categorías de recetas|Videos instructivos|Sección de técnicas culinarias",
+    connectDescription: "Si tenés sugerencias o querés compartir tu experiencia con Coomi, me encantaría saber de vos:",
 
     // Footer
     createdWith: "Creado con ❤️ por Martín Moore.",
@@ -141,6 +172,13 @@ const translations = {
     language: "Idioma",
     spanish: "Español",
     english: "Inglés",
+    useLightTheme: "Usar tema claro",
+    useDarkTheme: "Usar tema oscuro",
+    openMenu: "Abrir menú",
+    closeMenu: "Cerrar menú",
+    recipeLower: "receta", recipesLower: "recetas", previous: "Anterior", next: "Siguiente",
+    back: "Volver", close: "Cerrar", minutes: "minutos", servings: "porciones",
+    adjustQuantitiesFor: "Ajustá las cantidades para", decreaseServings: "Reducir porciones", increaseServings: "Aumentar porciones",
   },
   en: {
     // Navbar
@@ -169,6 +207,7 @@ const translations = {
     noResults: "We didn't find recipes with those ingredients",
     tryOther: "Try with other ingredients or less specific ones.",
     clearSearch: "Clear search",
+    removeIngredient: "Remove ingredient",
 
     // Vegetarian
     vegetarianTitle: "Vegetarian Options",
@@ -176,6 +215,9 @@ const translations = {
       "Looking for meat-free alternatives? You can replace meat in many of our recipes with vegetarian options. One of our favorites is the Smoked Eggplant Katsu, which you can use instead of meat in recipes like Katsudon or Katsu Curry.",
     eggplantKatsu: "Smoked Eggplant Katsu",
     glutenFreeOption: "Gluten-Free Option",
+    meatFree: "Meat-free",
+    eggplantSteps: "Peel an eggplant, leaving the stem attached.|Coat it with olive oil, pepper, and a little salt.|Wrap it in foil and roast in a hot oven for 15–20 minutes.|It should be soft enough to flatten gently without falling apart.|Once it is 1–1.5 cm thick, coat it in flour, then egg, and finally panko.|Deep-fry in hot oil until golden, then finish with freshly grated lemon zest.",
+    glutenFreeDescription: "Replace the panko with gluten-free panko. Coat the food first in gluten-free panko, then egg, and finally panko again. Use fresh oil to prevent cross-contamination.",
 
     // Recipe Modal
     recipe: "Recipe",
@@ -193,6 +235,9 @@ const translations = {
 
     // Tips
     cookingTips: "Cooking Tips",
+    cooking: "Cooking",
+    tipTitles: "Fry Properly|Drain Without Losing Crispness|Creative Risotto|Caramelize Onions|Versatile Sauces|Make Ahead",
+    tipBodies: "Always fry in plenty of oil: food cooks evenly, stays crisper, and absorbs less fat.|Drain fried food on a rack instead of paper towels to preserve its crunch. Add lemon zest and salt while it is hot.|Treat risotto as a chance to experiment with flavors and finishes, such as mushroom or sweet potato cream.|Cook sliced onions over very low heat with butter and salt for 30–40 minutes. Patience lets them caramelize without burning.|Sauces and creams can be a base, dip, or dressing. Mix and match them with dishes to discover new flavors.|Many sauces, creams, and fillings can be prepared ahead and often taste even better after a day in the refrigerator.",
 
     // Forum
     recipesForum: "Recipes Forum",
@@ -207,6 +252,9 @@ const translations = {
     noComments: "No comments yet. Be the first to comment!",
     recipe_optional: "Recipe (optional)",
     general: "General (no specific recipe)",
+    community: "Community",
+    deleteComment: "Delete comment",
+    commentsUnavailable: "We couldn't connect to the forum. Please try again in a moment.",
 
     // About
     aboutProject: "About the Project",
@@ -216,6 +264,17 @@ const translations = {
     futurePlans: "Future Plans",
     connect: "Let's Connect",
     contact: "Contact",
+    aboutIdeaTitle: "How did Coomi begin?",
+    aboutIdeaOne: "Coomi began because I often cooked for friends and family. When I decided to move to Spain in April 2025, I wanted to leave them a way to keep making my recipes, create their own, and share them.",
+    aboutIdeaTwo: "The project grew to include a community forum, cooking tips, an ingredient calculator, and more features to come. Coomi brings together my interest in food and my curiosity about web development.",
+    features: "Features", featureItems: "Dark/light mode|Responsive design|Smooth animations|Ingredient search|Serving calculator",
+    reflectionOne: "Building Coomi has been a journey combining programming and cooking: the intersection of my growth as a developer and my love of food.",
+    reflectionTwo: "Every component was designed to make recipes easy to find, understand, and adapt.",
+    reflectionThree: "It is more than a digital cookbook: it shows how technology can preserve culinary traditions and pass them on to new generations.",
+    functionality: "Functionality", content: "Content",
+    functionalityItems: "More recipes|Authentication|Saved favorites|Shopping list",
+    contentItems: "More recipe categories|Instructional videos|Cooking techniques section",
+    connectDescription: "If you have suggestions or want to share your experience with Coomi, I would love to hear from you:",
 
     // Footer
     createdWith: "Created with ❤️ by Martín Moore.",
@@ -224,6 +283,13 @@ const translations = {
     language: "Language",
     spanish: "Spanish",
     english: "English",
+    useLightTheme: "Use light theme",
+    useDarkTheme: "Use dark theme",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    recipeLower: "recipe", recipesLower: "recipes", previous: "Previous", next: "Next",
+    back: "Back", close: "Close", minutes: "minutes", servings: "servings",
+    adjustQuantitiesFor: "Adjust quantities for", decreaseServings: "Decrease servings", increaseServings: "Increase servings",
   },
 }
 

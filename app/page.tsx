@@ -5,16 +5,19 @@ import { motion, AnimatePresence } from "framer-motion"
 import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
 import RecipeGallery from "@/components/recipe-gallery"
-import { recipes } from "@/data/recipes"
+import { getRecipes } from "@/data/recipes"
 import Footer from "@/components/footer"
 import SearchSection from "@/components/search-section"
 import VegetarianSection from "@/components/vegetarian-section"
 import TipsSection from "@/components/tips-section"
 import ForumSection from "@/components/forum-section"
 import AboutSection from "@/components/about-section"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<string>("browse")
+  const { language, t } = useLanguage()
+  const recipes = getRecipes(language)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +35,7 @@ export default function Home() {
       <Hero />
 
       <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="tabs-container mb-16">
+        <section id="recipes-section" className="tabs-container mb-16 scroll-mt-20">
           <div className="tabs flex justify-center gap-10 mb-12 border-b border-border pb-5">
             <button
               className={`tab text-2xl font-artistic transition-all ${
@@ -40,7 +43,7 @@ export default function Home() {
               }`}
               onClick={() => setActiveSection("browse")}
             >
-              Explorar Recetas
+              {t("exploreRecipes")}
             </button>
             <button
               className={`tab text-2xl font-artistic transition-all ${
@@ -48,7 +51,7 @@ export default function Home() {
               }`}
               onClick={() => setActiveSection("search")}
             >
-              Buscar por Ingredientes
+              {t("searchByIngredients")}
             </button>
           </div>
 
@@ -75,7 +78,7 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </section>
 
         <VegetarianSection />
         <TipsSection />

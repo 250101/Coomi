@@ -127,7 +127,7 @@ export default function Hero() {
   }, [])
 
   const scrollToContent = () => {
-    document.getElementById("browse")?.scrollIntoView({ behavior: "smooth" })
+    document.getElementById("recipes-section")?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
@@ -222,12 +222,13 @@ export default function Hero() {
 
       {/* Flecha scroll */}
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 1.5 }}
-        onClick={scrollToContent}
       >
-        <ChevronDown size={32} className="text-foreground/50" />
+        <button type="button" onClick={scrollToContent} aria-label={t("exploreRecipes")}>
+          <ChevronDown size={32} className="text-foreground/50" />
+        </button>
       </motion.div>
     </section>
   )

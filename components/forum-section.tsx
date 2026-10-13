@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Send, Trash2, User, MessageSquare } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 // Fix: importar recetas directamente en vez de duplicar la lista
-import { recipes } from "@/data/recipes"
+import { getRecipes } from "@/data/recipes"
 
 interface Comment {
   id: string
@@ -17,12 +17,15 @@ interface Comment {
 }
 
 export default function ForumSection() {
-  const [comments, setComments]           = useState<Comment[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
+  const [deletionTokens, setDeletionTokens] = useState<Record<string, string>>({})
+  const [loadError, setLoadError] = useState(false)
   const [newComment, setNewComment]       = useState("")
   const [authorName, setAuthorName]       = useState("")
   const [selectedRecipe, setSelectedRecipe] = useState("")
   const [isSubmitting, setIsSubmitting]   = useState(false)
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
+  const recipes = getRecipes(language)
 
   // Opciones de receta generadas desde recipes.ts — ya no hardcodeadas
   const recipeOptions = [
@@ -31,41 +34,112 @@ export default function ForumSection() {
   ]
 
   useEffect(() => {
-    const saved = localStorage.getItem("forumComments")
-    if (saved) {
+    let cancelled = false
+
+    const loadComments = async () => {
       try {
-        const parsed = JSON.parse(saved)
-        setComments(parsed.map((c: any) => ({ ...c, date: new Date(c.date) })))
-      } catch {}
+        const savedTokens = JSON.parse(localStorage.getItem("forumCommentTokens") || "{}") as Record<string, string>
+        const legacy = JSON.parse(localStorage.getItem("forumComments") || "[]") as unknown
+
+        if (Array.isArray(legacy) && legacy.length > 0) {
+          const migratedTokens = { ...savedTokens }
+          await Promise.all(legacy.map(async (value) => {
+            if (!value || typeof value !== "object") return
+            const item = value as Record<string, unknown>
+            if (typeof item.id !== "string" || typeof item.author !== "string" || typeof item.content !== "string") return
+
+            const response = await fetch("/api/comments", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                author: item.author,
+                content: item.content,
+                recipe: typeof item.recipe === "string" ? item.recipe : undefined,
+                date: new Date(String(item.date)).toISOString(),
+                clientReference: `legacy_${item.id.replace(/[^a-zA-Z0-9_-]/g, "_")}`,
+              }),
+            })
+            if (!response.ok) throw new Error("Legacy comment migration failed")
+            const result = await response.json()
+            migratedTokens[result.comment.id] = result.deletionToken
+          }))
+          localStorage.setItem("forumCommentTokens", JSON.stringify(migratedTokens))
+          localStorage.removeItem("forumComments")
+          Object.assign(savedTokens, migratedTokens)
+        }
+
+        const response = await fetch("/api/comments", { cache: "no-store" })
+        if (!response.ok) throw new Error("Comment loading failed")
+        const data = await response.json() as Array<Omit<Comment, "date"> & { date: string }>
+        if (!cancelled) {
+          setComments(data.map((comment) => ({ ...comment, date: new Date(comment.date) })))
+          setDeletionTokens(savedTokens)
+          setLoadError(false)
+        }
+      } catch (error) {
+        console.error(error)
+        if (!cancelled) setLoadError(true)
+      }
     }
+
+    void loadComments()
+    return () => { cancelled = true }
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem("forumComments", JSON.stringify(comments))
-  }, [comments])
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newComment.trim() || !authorName.trim()) return
     setIsSubmitting(true)
-    const comment: Comment = {
-      id: Date.now().toString(),
-      author: authorName,
-      content: newComment,
-      date: new Date(),
-      recipe: selectedRecipe || undefined,
+    try {
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          author: authorName,
+          content: newComment,
+          recipe: selectedRecipe || undefined,
+          clientReference: crypto.randomUUID(),
+        }),
+      })
+      if (!response.ok) throw new Error("Comment creation failed")
+      const result = await response.json()
+      const comment = { ...result.comment, date: new Date(result.comment.date) } as Comment
+      const nextTokens = { ...deletionTokens, [comment.id]: result.deletionToken }
+      setComments((prev) => [comment, ...prev.filter((item) => item.id !== comment.id)])
+      setDeletionTokens(nextTokens)
+      localStorage.setItem("forumCommentTokens", JSON.stringify(nextTokens))
+      setNewComment("")
+      setLoadError(false)
+    } catch (error) {
+      console.error(error)
+      setLoadError(true)
+    } finally {
+      setIsSubmitting(false)
     }
-    setComments((prev) => [comment, ...prev])
-    setNewComment("")
-    setIsSubmitting(false)
   }
 
-  const deleteComment = (id: string) => {
-    setComments((prev) => prev.filter((c) => c.id !== id))
+  const deleteComment = async (id: string) => {
+    const token = deletionTokens[id]
+    if (!token) return
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: "DELETE",
+        headers: { "x-deletion-token": token },
+      })
+      if (!response.ok) throw new Error("Comment deletion failed")
+      setComments((prev) => prev.filter((comment) => comment.id !== id))
+      const nextTokens = { ...deletionTokens }
+      delete nextTokens[id]
+      setDeletionTokens(nextTokens)
+      localStorage.setItem("forumCommentTokens", JSON.stringify(nextTokens))
+    } catch (error) {
+      console.error(error)
+      setLoadError(true)
+    }
   }
 
   const formatDate = (date: Date) =>
-    new Intl.DateTimeFormat("es-AR", {
+    new Intl.DateTimeFormat(language === "es" ? "es-AR" : "en-GB", {
       year: "numeric", month: "long", day: "numeric",
       hour: "2-digit", minute: "2-digit",
     }).format(date)
@@ -88,7 +162,7 @@ export default function ForumSection() {
               <MessageSquare size={16} className="text-primary" />
             </div>
             <span className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-              Comunidad
+              {t("community")}
             </span>
           </div>
           <h2 className="text-5xl md:text-6xl font-display leading-none mb-8">
@@ -108,6 +182,7 @@ export default function ForumSection() {
           transition={{ duration: 0.5 }}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
+            {loadError && <p role="alert" className="text-sm text-destructive">{t("commentsUnavailable")}</p>}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 type="text"
@@ -187,13 +262,15 @@ export default function ForumSection() {
                           <p className="text-xs text-muted-foreground">{formatDate(comment.date)}</p>
                         </div>
                       </div>
-                      <button
-                        onClick={() => deleteComment(comment.id)}
-                        className="text-muted-foreground hover:text-destructive transition-colors p-1"
-                        aria-label="Eliminar comentario"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                      {deletionTokens[comment.id] && (
+                        <button
+                          onClick={() => void deleteComment(comment.id)}
+                          className="text-muted-foreground hover:text-destructive transition-colors p-1"
+                          aria-label={t("deleteComment")}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
                     </div>
 
                     {recipeName && (

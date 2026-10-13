@@ -16,6 +16,8 @@ export interface Recipe {
   steps: string[]
 }
 
+export type LocalizedRecipe = Recipe
+
 export const recipes: Recipe[] = [
   {
     id: "crema-boniato",
@@ -427,4 +429,84 @@ export const recipes: Recipe[] = [
     ],
   },
 ]
+
+type RecipeCopy = Pick<Recipe, "name" | "description" | "servingType" | "tags" | "ingredients" | "steps">
+
+const englishRecipeCopy: Record<string, RecipeCopy> = {
+  "crema-boniato": {
+    name: "Sweet Potato Cream", description: "A delicious sweet potato cream, perfect as a base, dip, or dressing.", servingType: "Servings", tags: ["Vegetarian", "Gluten-Free"],
+    ingredients: [{name:"Medium sweet potatoes",quantity:2,unit:"units"},{name:"Garlic clove",quantity:1,unit:"clove"},{name:"Butter",quantity:50,unit:"g"},{name:"Milk",quantity:50,unit:"ml"},{name:"Salt and pepper",quantity:0,unit:"to taste"},{name:"Chili flakes",quantity:0,unit:"to taste"}],
+    steps: ["Bring water to a boil. Peel and evenly chop the sweet potatoes, then boil them with the garlic clove.","Cook until tender, about 15–20 minutes, drain, and transfer to a blender.","Add the milk, salt, pepper, and chili flakes if you like some heat.","Blend, add the butter, and blend again until creamy.","Use it as a base, dip, or dressing; you can also make it with beetroot, carrot, or potato."],
+  },
+  "manteca-miso": {
+    name:"Miso Butter",description:"Butter flavored with miso, honey, and lemon, ideal with meat, fish, or vegetables.",servingType:"Servings",tags:["Vegetarian"],
+    ingredients:[{name:"Butter",quantity:200,unit:"g"},{name:"Miso paste",quantity:30,unit:"g"},{name:"Honey",quantity:15,unit:"g"},{name:"Lemon zest",quantity:1,unit:"lemon"}],
+    steps:["Melt the butter over low heat.","Pour it into a cold bowl set over ice.","Add the miso, honey, and lemon zest; whisk until the butter firms up again.","Serve immediately in a small bowl, or roll it into a cylinder in plastic wrap and refrigerate."],
+  },
+  "crema-champinones": {
+    name:"Mushroom and Onion Cream",description:"A creamy mushroom sauce with caramelized onion, perfect with meat or pasta.",servingType:"Servings",tags:["Vegetarian"],
+    ingredients:[{name:"Medium onions",quantity:2,unit:"units"},{name:"Mushrooms",quantity:200,unit:"g"},{name:"Heavy cream",quantity:200,unit:"ml"},{name:"Butter",quantity:50,unit:"g"},{name:"Salt and pepper",quantity:1,unit:"pinch"},{name:"Grated cheese",quantity:50,unit:"g"}],
+    steps:["Slice and slowly caramelize the onions with a little oil for 30–40 minutes.","Add the mushrooms and cook until tender, about 10 minutes.","Add the cream and warm it without boiling.","Blend with the butter, salt, pepper, and grated cheese until smooth."],
+  },
+  "croquetas-risotto": {
+    name:"Risotto Croquettes",description:"Crisp croquettes made with leftover risotto, perfect as an appetizer.",servingType:"Croquettes",tags:["Vegetarian","Zero Waste"],
+    ingredients:[{name:"Cooked leftover risotto",quantity:300,unit:"g"},{name:"Panko",quantity:100,unit:"g"},{name:"Flour",quantity:50,unit:"g"},{name:"Eggs",quantity:2,unit:"units"},{name:"Oil for frying",quantity:500,unit:"ml"}],
+    steps:["Shape the cold risotto into medium croquettes.","Coat them in flour, beaten egg, and finally panko.","Deep-fry over medium-high heat until golden, about 2–3 minutes per side.","Serve topped with sweet potato cream and aioli."],
+  },
+  "croquetas-osobuco": {
+    name:"Osso Buco Croquettes",description:"Creamy croquettes with shredded osso buco and caramelized onion.",servingType:"Croquettes",tags:["Gourmet","Make Ahead"],
+    ingredients:[{name:"Medium onions",quantity:2,unit:"units"},{name:"Osso buco",quantity:500,unit:"g"},{name:"Beef stock",quantity:1,unit:"liter"},{name:"Panko",quantity:100,unit:"g"},{name:"Butter (for béchamel)",quantity:75,unit:"g"},{name:"Flour (for béchamel)",quantity:75,unit:"g"},{name:"Milk (for béchamel)",quantity:100,unit:"ml"},{name:"Eggs",quantity:2,unit:"units"},{name:"Oil for frying",quantity:500,unit:"ml"},{name:"Salt and pepper",quantity:0,unit:"to taste"}],
+    steps:["Slow-cook the osso buco in beef stock for 2 hours, then shred it.","Slowly caramelize the sliced onions for 30–40 minutes and combine with the meat.","Make a béchamel with the butter, flour, and cold milk; season it and mix it into the meat.","Cover the surface, cool, and refrigerate overnight.","Shape the cold mixture, coat in flour, egg, and panko, then fry until golden and drain on a rack."],
+  },
+  "empanadas-carne": {
+    name:"Beef Empanadas",description:"Classic Argentine empanadas with a juicy beef and vegetable filling.",servingType:"Empanadas",tags:["Classic","For Sharing"],
+    ingredients:[{name:"Carrot",quantity:1,unit:"unit"},{name:"Medium onions",quantity:2,unit:"units"},{name:"Celery",quantity:3,unit:"stalks"},{name:"Tomato sauce",quantity:800,unit:"g"},{name:"Ground beef",quantity:1.5,unit:"kg"},{name:"Empanada wrappers",quantity:36,unit:"units"},{name:"Olive oil",quantity:50,unit:"ml"},{name:"Oregano, pepper, and salt",quantity:0,unit:"to taste"},{name:"Red wine",quantity:50,unit:"ml"},{name:"Bay leaf",quantity:1,unit:"leaf"},{name:"Beef fat (optional, for frying)",quantity:500,unit:"g"}],
+    steps:["Brown the ground beef in olive oil over high heat.","Remove it, then cook the finely diced carrot for 5 minutes; add the celery and cook 5 minutes more.","Add the onion and cook until the vegetables are translucent.","Return the beef, season, add the wine, and let it evaporate.","Add tomato sauce and bay leaf; cover and simmer for about 1 hour until thick.","Remove the bay leaf and let the filling cool.","Fill and seal the wrappers. Bake at 200°C for 20–25 minutes or fry for 3–4 minutes per side."],
+  },
+  katsudon: {
+    name:"Katsudon",description:"Japanese breaded pork cutlet served over rice with egg and onion.",servingType:"Servings",tags:["Japanese"],
+    ingredients:[{name:"Pork tenderloin",quantity:500,unit:"g"},{name:"Rice seasoning",quantity:50,unit:"ml"},{name:"Eggs",quantity:4,unit:"units"},{name:"Onion",quantity:1,unit:"unit"},{name:"Pickles",quantity:6,unit:"slices"},{name:"Uncooked rice",quantity:200,unit:"g"},{name:"Katsu sauce",quantity:1,unit:"serving"},{name:"Panko",quantity:100,unit:"g"},{name:"Flour",quantity:50,unit:"g"},{name:"Oil for frying",quantity:500,unit:"ml"},{name:"Salt and pepper",quantity:0,unit:"to taste"},{name:"Scallion and sesame seeds",quantity:1,unit:"pinch"}],
+    steps:["Rice: rinse until the water runs clear, cook covered for 15 minutes, rest for 10, then season with warm rice vinegar, salt, and sugar.","Katsu: flatten the pork, coat in seasoned flour, egg, and panko, then fry until golden.","Serve the sliced katsu over rice with crispy onion, pickles, scallion, sesame seeds, and katsu sauce."],
+  },
+  "katsu-curry": {
+    name:"Katsu Curry",description:"Breaded pork cutlet with creamy Japanese curry sauce over rice.",servingType:"Servings",tags:["Japanese","Curry"],
+    ingredients:[{name:"Pork tenderloin",quantity:500,unit:"g"},{name:"Onion (for crispy onion)",quantity:1,unit:"unit"},{name:"Uncooked rice",quantity:200,unit:"g"},{name:"Onions (for sauce)",quantity:3,unit:"units"},{name:"Red apple",quantity:1,unit:"unit"},{name:"Chicken stock",quantity:1,unit:"liter"},{name:"Panko",quantity:100,unit:"g"},{name:"Egg",quantity:1,unit:"unit"},{name:"Worcestershire sauce",quantity:25,unit:"ml"},{name:"Curry powder",quantity:25,unit:"g"},{name:"Flour",quantity:75,unit:"g"},{name:"Butter",quantity:100,unit:"g"},{name:"Ketchup",quantity:45,unit:"ml"},{name:"Soy sauce",quantity:15,unit:"ml"},{name:"Oil for frying",quantity:500,unit:"ml"}],
+    steps:["Prepare the rice and katsu as in the Katsudon recipe.","Caramelize the onions, then add grated apple and ketchup; cook for 3 minutes and add butter.","Add flour and curry powder, then gradually whisk in the stock until thick.","Add Worcestershire, soy sauce, and a little more ketchup, then blend safely.","Serve rice and curry side by side, topped with sliced katsu and crispy onion."],
+  },
+  risotto: {
+    name:"Risotto",description:"Creamy risotto with curry, smoked paprika, and cheese.",servingType:"Servings",tags:["Vegetarian","Italian"],
+    ingredients:[{name:"Carnaroli rice",quantity:500,unit:"g"},{name:"Medium onions",quantity:2,unit:"units"},{name:"Curry powder",quantity:25,unit:"g"},{name:"Smoked paprika",quantity:10,unit:"g"},{name:"Pepper",quantity:0,unit:"to taste"},{name:"Butter",quantity:100,unit:"g"},{name:"Stock",quantity:1,unit:"liter"},{name:"White wine",quantity:100,unit:"ml"},{name:"Grated cheese",quantity:100,unit:"g"}],
+    steps:["Finely dice the onions and cook slowly with butter and salt until translucent.","Add the rice and toast for about 5 minutes.","Add wine, curry, paprika, and pepper; stir until the wine evaporates.","Add hot stock one cup at a time, stirring until the rice is cooked and still slightly loose.","Turn off the heat and emulsify with cheese and butter.","Serve immediately, on its own or with chicken or mushroom cream."],
+  },
+  "lomo-boniato": {
+    name:"Beef Tenderloin with Sweet Potato Cream and Lattice Fries",description:"Tenderloin medallions over sweet potato cream with crisp lattice fries.",servingType:"Servings",tags:["Gourmet","Beef"],
+    ingredients:[{name:"Beef tenderloin",quantity:500,unit:"g"},{name:"Medium potatoes",quantity:5,unit:"units"},{name:"Medium sweet potatoes",quantity:3,unit:"units"},{name:"Heavy cream",quantity:200,unit:"ml"},{name:"Butter",quantity:50,unit:"g"},{name:"Salt and pepper",quantity:0,unit:"to taste"},{name:"Lemon zest",quantity:1,unit:"lemon"},{name:"Oil for frying",quantity:500,unit:"ml"}],
+    steps:["Prepare the sweet potato cream from the Sauces & Creams recipe.","Clean the tenderloin, cut three thick steaks, and season.","Cut lattice fries with a mandoline, fry until golden, and season with salt, pepper, and lemon zest.","Sear the medallions in butter and cook about 5 minutes per side, or to your liking.","Plate over sweet potato cream with the lattice fries alongside."],
+  },
+  tortilla: {
+    name:"Spanish Omelet",description:"A classic Spanish omelet with potatoes and caramelized onion, golden outside and soft inside.",servingType:"Servings",tags:["Vegetarian","Spanish"],
+    ingredients:[{name:"Medium potatoes",quantity:5,unit:"units"},{name:"Eggs",quantity:9,unit:"units"},{name:"Medium onion",quantity:1,unit:"unit"},{name:"Oil for frying",quantity:500,unit:"ml"},{name:"Salt",quantity:0,unit:"to taste"}],
+    steps:["Slice and slowly caramelize the onion for 30–40 minutes.","Peel, thinly slice, and fry the potatoes until tender.","Drain, salt, and mix them with the onion.","Lightly brown the potato and onion mixture in a pan.","Combine with the beaten eggs and rest for 10 minutes.","Cook in a nonstick pan for 2–3 minutes, flip, and cook the other side for 1 minute."],
+  },
+  tiramisu: {
+    name:"Tiramisu",description:"Classic Italian dessert with coffee-soaked ladyfingers and mascarpone cream.",servingType:"Servings",tags:["Italian","No-Bake"],
+    ingredients:[{name:"Mascarpone",quantity:500,unit:"g"},{name:"Eggs",quantity:6,unit:"units"},{name:"Cold coffee",quantity:200,unit:"ml"},{name:"Powdered sugar",quantity:200,unit:"g"},{name:"Ladyfingers",quantity:36,unit:"units"},{name:"Cocoa powder",quantity:0,unit:"to cover"}],
+    steps:["Separate the eggs.","Beat the yolks with powdered sugar until pale.","Beat in the mascarpone until smooth.","Whip the whites to stiff peaks and gently fold them in.","Layer cream, coffee-dipped ladyfingers, and the remaining cream in a dish.","Cover directly and refrigerate for 24 hours.","Dust with cocoa before serving."],
+  },
+  "rolls-canela": {
+    name:"Cinnamon Rolls",description:"Soft cinnamon rolls with cream cheese frosting.",servingType:"Rolls",tags:["Baked","Sweet"],
+    ingredients:[{name:"Warm milk",quantity:180,unit:"ml"},{name:"Dry yeast",quantity:10,unit:"g"},{name:"Melted butter",quantity:60,unit:"g"},{name:"Sugar",quantity:50,unit:"g"},{name:"Egg",quantity:1,unit:"unit"},{name:"Flour",quantity:450,unit:"g"},{name:"Softened butter (filling)",quantity:120,unit:"g"},{name:"Brown sugar (filling)",quantity:200,unit:"g"},{name:"Ground cinnamon (filling)",quantity:10,unit:"g"},{name:"Softened butter (frosting)",quantity:100,unit:"g"},{name:"Powdered sugar (frosting)",quantity:100,unit:"g"},{name:"Cream cheese (frosting)",quantity:250,unit:"g"},{name:"Vanilla extract (frosting)",quantity:5,unit:"ml"},{name:"Heavy cream",quantity:50,unit:"ml"}],
+    steps:["Mix warm milk and yeast; cover and activate for 15 minutes.","Knead with flour, melted butter, sugar, and egg; let rise for 1 hour.","Roll into a rectangle, spread with butter, sprinkle with brown sugar and cinnamon, and roll up.","Cut 12 rolls, place in a lined pan, and rise for 30 minutes.","Pour cream into the gaps and bake at 180°C for 30 minutes.","Mix the frosting ingredients until creamy.","Spread the frosting over the warm rolls."],
+  },
+  cookies: {
+    name:"Chocolate Chip Cookies",description:"Delicious chocolate chunk cookies, perfect with coffee or for dessert.",servingType:"Cookies",tags:["Baked","Sweet"],
+    ingredients:[{name:"Unsalted butter",quantity:225,unit:"g"},{name:"White sugar",quantity:175,unit:"g"},{name:"Brown sugar",quantity:175,unit:"g"},{name:"Eggs",quantity:2,unit:"units"},{name:"Vanilla extract",quantity:2.5,unit:"ml"},{name:"All-purpose flour",quantity:400,unit:"g"},{name:"Salt",quantity:.5,unit:"teaspoon"},{name:"Baking soda",quantity:10,unit:"g"},{name:"Dark chocolate chunks",quantity:250,unit:"g"}],
+    steps:["Cream the butter and both sugars until pale and airy.","Mix in the eggs and vanilla.","Fold in flour, salt, and baking soda to form a dough.","Mix in 200 g of chocolate, reserving the rest.","Shape into balls and freeze for 30 minutes or chill for 1 hour.","Bake six at a time at 170°C for about 12 minutes, until the edges are golden.","Tap the tray, cool, and decorate with the reserved chocolate."],
+  },
+}
+
+export function getRecipes(language: "es" | "en"): Recipe[] {
+  if (language === "es") return recipes
+  return recipes.map((recipe) => ({ ...recipe, ...englishRecipeCopy[recipe.id] }))
+}
 

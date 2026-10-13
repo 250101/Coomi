@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import LanguageSwitcher from "./language-switcher"
+import ThemeToggle from "./theme-toggle"
 import Logo from "./logo"
 
 interface NavbarProps {
@@ -23,23 +24,21 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const handleNavLinkClick = (section: string) => {
-    setActiveSection(section)
+  const handleNavLinkClick = (section: string, tab?: "browse" | "search") => {
+    if (tab) setActiveSection(tab)
     setIsMenuOpen(false)
-    const element = document.getElementById(`${section}-section`)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    } else if (section === "home") {
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    }
+    requestAnimationFrame(() => {
+      document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
+    })
   }
 
   const navLinks = [
-    { key: "home",      label: t("home")      },
-    { key: "browse",    label: t("recipes")   },
-    { key: "locations", label: t("locations") },
-    { key: "forum",     label: t("forum")     },
-    { key: "about",     label: t("about")     },
+    { key: "browse", id: "recipes-section", label: t("explore"), tab: "browse" as const },
+    { key: "search", id: "recipes-section", label: t("search"), tab: "search" as const },
+    { key: "vegetarian", id: "vegetarian", label: t("vegetarian") },
+    { key: "tips", id: "tips", label: t("tips") },
+    { key: "forum", id: "forum", label: t("forum") },
+    { key: "about", id: "about", label: t("about") },
   ]
 
   return (
@@ -60,7 +59,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
             {navLinks.map((link) => (
               <button
                 key={link.key}
-                onClick={() => handleNavLinkClick(link.key)}
+                onClick={() => handleNavLinkClick(link.id, link.tab)}
                 className={`nav-link transition-colors hover:text-primary ${
                   activeSection === link.key ? "text-primary" : "text-muted-foreground"
                 }`}
@@ -68,6 +67,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                 {link.label}
               </button>
             ))}
+            <ThemeToggle />
             <LanguageSwitcher />
           </nav>
 
@@ -75,7 +75,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
           <button
             className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -96,7 +96,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
               {navLinks.map((link) => (
                 <button
                   key={link.key}
-                  onClick={() => handleNavLinkClick(link.key)}
+                  onClick={() => handleNavLinkClick(link.id, link.tab)}
                   className={`nav-link text-left py-2 transition-colors hover:text-primary ${
                     activeSection === link.key ? "text-primary" : "text-muted-foreground"
                   }`}
@@ -104,7 +104,8 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                   {link.label}
                 </button>
               ))}
-              <div className="pt-2 border-t border-border">
+              <div className="flex items-center gap-2 pt-2 border-t border-border">
+                <ThemeToggle />
                 <LanguageSwitcher />
               </div>
             </nav>
