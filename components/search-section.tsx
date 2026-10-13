@@ -12,11 +12,38 @@ interface SearchSectionProps {
   openRecipeModal?: (recipe: Recipe) => void
 }
 
+type RecipeMatch = {
+  recipe: Recipe
+  matchedCount: number
+  missingIngredients: string[]
+  coverage: number
+}
+
+const normalizeIngredient = (value: string) => value
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/\([^)]*\)/g, "")
+  .replace(/\b(median[oa]s?|grandes?|pequen[oa]s?|fresc[oa]s?|picad[oa]s?|rallad[oa]s?|crudos?|cocidos?)\b/g, "")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim()
+
+const ingredientMatches = (available: string, required: string) => {
+  const left = normalizeIngredient(available)
+  const right = normalizeIngredient(required)
+  if (!left || !right) return false
+  if (left.includes(right) || right.includes(left)) return true
+
+  const leftWords = left.split(" ").filter((word) => word.length > 2)
+  const rightWords = right.split(" ").filter((word) => word.length > 2)
+  return leftWords.some((word) => rightWords.some((other) => word === other || word.startsWith(other) || other.startsWith(word)))
+}
+
 export default function SearchSection({ recipes }: SearchSectionProps) {
   const [searchTerm, setSearchTerm]               = useState("")
   const [suggestions, setShowSuggestions]         = useState(false)
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([])
-  const [searchResults, setSearchResults]         = useState<Recipe[]>([])
+  const [searchResults, setSearchResults]         = useState<RecipeMatch[]>([])
   const [hasSearched, setHasSearched]             = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
@@ -45,12 +72,18 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
 
   const searchRecipes = useCallback(() => {
     if (selectedIngredients.length === 0) return
-    const results = recipes.filter((recipe) => {
-      const recipeIngredients = recipe.ingredients.map((i) => i.name.toLowerCase())
-      return selectedIngredients.every((selected) =>
-        recipeIngredients.some((ingredient) => ingredient.includes(selected))
-      )
-    })
+    const results = recipes
+      .map((recipe): RecipeMatch => {
+        const requiredIngredients = recipe.ingredients.filter((ingredient) => ingredient.quantity > 0)
+        const missingIngredients = requiredIngredients
+          .filter((ingredient) => !selectedIngredients.some((selected) => ingredientMatches(selected, ingredient.name)))
+          .map((ingredient) => ingredient.name)
+        const matchedCount = requiredIngredients.length - missingIngredients.length
+        const coverage = requiredIngredients.length === 0 ? 0 : Math.round((matchedCount / requiredIngredients.length) * 100)
+        return { recipe, matchedCount, missingIngredients, coverage }
+      })
+      .filter((result) => result.matchedCount > 0)
+      .sort((a, b) => b.coverage - a.coverage || a.missingIngredients.length - b.missingIngredients.length || a.recipe.time - b.recipe.time)
     setSearchResults(results)
     setHasSearched(true)
   }, [recipes, selectedIngredients])
@@ -166,17 +199,17 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h3 className="text-2xl font-display text-center mb-8">
             {searchResults.length > 0
-              ? t("resultsFound").replace("{count}", searchResults.length.toString())
+              ? t("suggestionsFound").replace("{count}", searchResults.length.toString())
               : t("noResults")}
           </h3>
 
           {searchResults.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {searchResults.map((recipe, i) => (
+              {searchResults.map(({ recipe, missingIngredients, coverage }, i) => (
                 <motion.div
                   key={recipe.id}
                   className="relative rounded-lg overflow-hidden cursor-pointer group"
-                  style={{ height: 200 }}
+                  style={{ minHeight: 260 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08 }}
@@ -192,12 +225,27 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
+                    <span className="rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                      {coverage}% {t("ingredientsAvailable")}
+                    </span>
+                    {missingIngredients.length === 0 && (
+                      <span className="rounded-full bg-primary px-3 py-1 text-xs font-medium text-white">{t("readyToCook")}</span>
+                    )}
+                  </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <h3 className="text-white font-display text-lg mb-1">{recipe.name}</h3>
                     <div className="flex gap-3 text-white/60 text-xs">
                       <span className="flex items-center gap-1"><Clock size={11} />{recipe.time} min</span>
                       <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || t("servings")}</span>
                     </div>
+                    {missingIngredients.length > 0 && (
+                      <p className="mt-2 text-xs leading-relaxed text-white/80 line-clamp-2">
+                        <span className="font-medium text-white">{t("youStillNeed")}:</span>{" "}
+                        {missingIngredients.slice(0, 4).join(", ")}
+                        {missingIngredients.length > 4 ? ` +${missingIngredients.length - 4}` : ""}
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               ))}

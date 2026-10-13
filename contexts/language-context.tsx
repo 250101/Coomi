@@ -89,10 +89,14 @@ const translations = {
 
     // Search
     searchTitle: "Buscar por Ingredientes",
-    searchDescription: "Selecciona los ingredientes que tenés en casa y te mostraremos recetas que podés preparar.",
+    searchDescription: "Seleccioná lo que tenés en casa y te mostraremos qué podés cocinar y qué te falta para completar cada receta.",
     searchPlaceholder: "Escribe un ingrediente...",
     searchButton: "Buscar Recetas",
     resultsFound: "Encontramos {count} recetas con tus ingredientes",
+    suggestionsFound: "Encontramos {count} recetas posibles para vos",
+    ingredientsAvailable: "de ingredientes",
+    readyToCook: "Podés cocinarla",
+    youStillNeed: "Te falta",
     noResults: "No encontramos recetas con esos ingredientes",
     tryOther: "Prueba con otros ingredientes o menos específicos.",
     clearSearch: "Limpiar búsqueda",
@@ -203,10 +207,14 @@ const translations = {
 
     // Search
     searchTitle: "Search by Ingredients",
-    searchDescription: "Select the ingredients you have at home and we'll show you recipes you can prepare.",
+    searchDescription: "Select what you have at home and we'll show you what you can cook and what each recipe is still missing.",
     searchPlaceholder: "Type an ingredient...",
     searchButton: "Search Recipes",
     resultsFound: "We found {count} recipes with your ingredients",
+    suggestionsFound: "We found {count} possible recipes for you",
+    ingredientsAvailable: "of ingredients",
+    readyToCook: "Ready to cook",
+    youStillNeed: "You still need",
     noResults: "We didn't find recipes with those ingredients",
     tryOther: "Try with other ingredients or less specific ones.",
     clearSearch: "Clear search",
