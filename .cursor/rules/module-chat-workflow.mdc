@@ -1,0 +1,13 @@
+---
+description: Crea un chat separado por cada módulo antes de modificarlo
+alwaysApply: true
+---
+
+# Flujo de trabajo por módulo
+
+- Antes de modificar cualquier módulo, crea un chat nuevo dentro de este mismo proyecto.
+- Usa como título del chat el nombre claro y conciso del módulo que se va a modificar.
+- Incluye en el mensaje inicial del chat el objetivo, el alcance y el contexto necesario de la corrección.
+- Realiza las modificaciones de ese módulo en su chat correspondiente.
+- Si una tarea afecta varios módulos, crea un chat independiente para cada módulo antes de modificarlo.
+- No crees chats para análisis, consultas o revisiones que no modifiquen archivos.
