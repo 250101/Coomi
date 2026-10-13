@@ -80,7 +80,7 @@ export default function Home() {
           </AnimatePresence>
         </section>
 
-        <VegetarianSection />
+        <VegetarianSection recipes={recipes} />
         <TipsSection />
         <ForumSection />
         <AboutSection />

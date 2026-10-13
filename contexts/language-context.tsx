@@ -102,6 +102,9 @@ const translations = {
     vegetarianTitle: "Opciones Vegetarianas",
     vegetarianDescription:
       "¿Buscás alternativas sin carne? Podés reemplazar la carne en muchas de nuestras recetas con opciones vegetarianas. Una de nuestras favoritas es el Katsu de Berenjena Ahumada, que podés usar en lugar de la carne en recetas como el Katsudon o Katsu Curry.",
+    vegetarianModuleDescription: "Descubrí todas las recetas vegetarianas de Coomi y filtralas por el tipo de plato que querés preparar.",
+    allRecipes: "Todas",
+    filterVegetarianRecipes: "Filtrar recetas vegetarianas",
     eggplantKatsu: "Katsu de Berenjena Ahumada",
     glutenFreeOption: "Opción Sin TACC",
     meatFree: "Sin carne",
@@ -213,6 +216,9 @@ const translations = {
     vegetarianTitle: "Vegetarian Options",
     vegetarianDescription:
       "Looking for meat-free alternatives? You can replace meat in many of our recipes with vegetarian options. One of our favorites is the Smoked Eggplant Katsu, which you can use instead of meat in recipes like Katsudon or Katsu Curry.",
+    vegetarianModuleDescription: "Explore every vegetarian recipe in Coomi and filter them by the kind of dish you want to prepare.",
+    allRecipes: "All",
+    filterVegetarianRecipes: "Filter vegetarian recipes",
     eggplantKatsu: "Smoked Eggplant Katsu",
     glutenFreeOption: "Gluten-Free Option",
     meatFree: "Meat-free",
