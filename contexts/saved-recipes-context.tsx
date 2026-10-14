@@ -1,7 +1,7 @@
 "use client"
 
-import { createContext, useCallback, useContext, useSyncExternalStore, type ReactNode } from "react"
-import { EMPTY_SAVED_RECIPES, loadSavedRecipes, saveSavedRecipes, type SavedRecipesState } from "@/lib/saved-recipes"
+import { createContext, useCallback, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react"
+import { EMPTY_SAVED_RECIPES, SAVED_RECIPES_KEY, loadSavedRecipes, parseSavedRecipes, saveSavedRecipes, type SavedRecipesState } from "@/lib/saved-recipes"
 
 type SavedRecipesContextType = SavedRecipesState & {
   isFavorite: (recipeId: string) => boolean
@@ -15,14 +15,18 @@ type SavedRecipesContextType = SavedRecipesState & {
 const SavedRecipesContext = createContext<SavedRecipesContextType | null>(null)
 
 export function SavedRecipesProvider({ children }: { children: ReactNode }) {
-  const state = useSyncExternalStore((onChange) => {
+  const snapshot = useSyncExternalStore((onChange) => {
     window.addEventListener("saved-recipes-change", onChange)
     window.addEventListener("storage", onChange)
     return () => {
       window.removeEventListener("saved-recipes-change", onChange)
       window.removeEventListener("storage", onChange)
     }
-  }, loadSavedRecipes, () => EMPTY_SAVED_RECIPES)
+  }, () => localStorage.getItem(SAVED_RECIPES_KEY) ?? "", () => "")
+  const state = useMemo(() => {
+    if (!snapshot) return EMPTY_SAVED_RECIPES
+    try { return parseSavedRecipes(JSON.parse(snapshot)) } catch { return EMPTY_SAVED_RECIPES }
+  }, [snapshot])
 
   const commit = useCallback((next: SavedRecipesState) => {
     saveSavedRecipes(next)
