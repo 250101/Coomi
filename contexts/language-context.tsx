@@ -192,6 +192,11 @@ const translations = {
     emptyList: "Tu lista está vacía", emptyListHint: "Agregá los ingredientes desde una receta o sumá un producto manualmente.", purchased: "comprados", removePurchased: "Eliminar comprados",
     recipeUses: "La receta usa", presentation: "Presentación", purchaseQuantity: "Cantidad a comprar", decreaseQuantity: "Reducir cantidad", increaseQuantity: "Aumentar cantidad",
     markPurchased: "Marcar como comprado", markPending: "Marcar como pendiente", remove: "Eliminar",
+    savedRecipes: "Guardados", savedRecipesDescription: "Reuní tus recetas favoritas y organizalas en colecciones que quedan guardadas en este dispositivo.",
+    favorites: "Favoritos", favorite: "Favorito", savedFavorite: "Guardada", addFavorite: "Agregar a favoritos", removeFavorite: "Quitar de favoritos",
+    collections: "Colecciones", addToCollection: "Agregar a una colección", noCollectionsYet: "Todavía no creaste colecciones.",
+    newCollectionName: "Nombre de la colección", createCollection: "Crear colección", collectionName: "Nombre de la colección", renameCollection: "Renombrar colección", deleteCollection: "Eliminar colección", deleteCollectionConfirm: "¿Eliminar esta colección? Tus recetas favoritas no se modificarán.",
+    filterSavedRecipes: "Filtrar recetas guardadas", noSavedRecipes: "No hay recetas acá todavía", noSavedRecipesHint: "Usá el corazón o el botón de colecciones en cualquier receta para guardarla.", save: "Guardar", addToListShort: "Al carrito",
   },
   en: {
     // Navbar
@@ -316,6 +321,11 @@ const translations = {
     emptyList: "Your list is empty", emptyListHint: "Add ingredients from a recipe or enter a product manually.", purchased: "purchased", removePurchased: "Remove purchased",
     recipeUses: "Recipe uses", presentation: "Package size", purchaseQuantity: "Quantity to buy", decreaseQuantity: "Decrease quantity", increaseQuantity: "Increase quantity",
     markPurchased: "Mark as purchased", markPending: "Mark as pending", remove: "Remove",
+    savedRecipes: "Saved", savedRecipesDescription: "Keep your favorite recipes together and organize them into collections stored on this device.",
+    favorites: "Favorites", favorite: "Favorite", savedFavorite: "Saved", addFavorite: "Add to favorites", removeFavorite: "Remove from favorites",
+    collections: "Collections", addToCollection: "Add to a collection", noCollectionsYet: "You haven't created any collections yet.",
+    newCollectionName: "Collection name", createCollection: "Create collection", collectionName: "Collection name", renameCollection: "Rename collection", deleteCollection: "Delete collection", deleteCollectionConfirm: "Delete this collection? Your favorite recipes won't be changed.",
+    filterSavedRecipes: "Filter saved recipes", noSavedRecipes: "No recipes here yet", noSavedRecipesHint: "Use the heart or collections button on any recipe to save it.", save: "Save", addToListShort: "Add to cart",
   },
 }
 

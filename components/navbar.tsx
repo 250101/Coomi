@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, ShoppingBasket } from "lucide-react"
+import { Heart, Menu, X, ShoppingBasket } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 import LanguageSwitcher from "./language-switcher"
@@ -70,6 +70,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                 {link.label}
               </button>
             ))}
+            <Link href="/guardados" className="text-muted-foreground transition-colors hover:text-primary" aria-label={t("savedRecipes")}><Heart size={20} /></Link>
             <Link href="/lista" className="relative text-muted-foreground transition-colors hover:text-primary" aria-label={t("shoppingList")}>
               <ShoppingBasket size={20} />
               {items.length > 0 && <span className="absolute -right-2 -top-2 min-w-4 rounded-full bg-primary px-1 text-center text-[10px] text-primary-foreground">{items.length}</span>}
@@ -111,6 +112,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                   {link.label}
                 </button>
               ))}
+              <Link href="/guardados" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2 text-left text-muted-foreground hover:text-primary"><Heart size={19} />{t("savedRecipes")}</Link>
               <Link href="/lista" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2 text-left text-muted-foreground hover:text-primary"><ShoppingBasket size={19} />{t("shoppingList")} {items.length > 0 && `(${items.length})`}</Link>
               <div className="flex items-center gap-2 pt-2 border-t border-border">
                 <ThemeToggle />

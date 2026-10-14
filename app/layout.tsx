@@ -6,6 +6,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
 import { ShoppingListProvider } from "@/contexts/shopping-list-context"
+import { SavedRecipesProvider } from "@/contexts/saved-recipes-context"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -52,7 +53,7 @@ export default function RootLayout({
         className={`${montserrat.variable} ${playfair.variable} ${bebas.variable} ${barlow.variable} font-montserrat`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <LanguageProvider><ShoppingListProvider>{children}</ShoppingListProvider></LanguageProvider>
+          <LanguageProvider><ShoppingListProvider><SavedRecipesProvider>{children}</SavedRecipesProvider></ShoppingListProvider></LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

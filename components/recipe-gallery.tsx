@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Clock, Users } from "lucide-react"
 import Link from "next/link"
 import type { Recipe } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
+import SaveRecipeActions from "@/components/save-recipe-actions"
 
 interface RecipeGalleryProps {
   recipes: Recipe[]
@@ -155,11 +156,11 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { t } = useLanguage()
 
   return (
+    <div className="relative rounded-lg shadow-lg" style={{ width: 280, height: 200, flexShrink: 0 }}>
     <Link
       href={`/recetas/${recipe.id}`}
       aria-label={`${t("viewRecipe")}: ${recipe.name}`}
-      className="relative block rounded-lg overflow-hidden bg-card shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      style={{ width: 280, height: 200, flexShrink: 0 }}
+      className="relative block h-full overflow-hidden rounded-lg bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -240,5 +241,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
           </motion.div>
       )}
     </Link>
+    <div className="absolute left-3 top-3 z-30"><SaveRecipeActions recipeId={recipe.id} compact light /></div>
+    </div>
   )
 }
