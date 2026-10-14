@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ShoppingBasket } from "lucide-react"
+import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 import LanguageSwitcher from "./language-switcher"
 import ThemeToggle from "./theme-toggle"
 import Logo from "./logo"
+import { useShoppingList } from "@/contexts/shopping-list-context"
 
 interface NavbarProps {
   activeSection: string
@@ -17,6 +19,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const { t } = useLanguage()
+  const { items } = useShoppingList()
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
@@ -67,6 +70,10 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                 {link.label}
               </button>
             ))}
+            <Link href="/lista" className="relative text-muted-foreground transition-colors hover:text-primary" aria-label={t("shoppingList")}>
+              <ShoppingBasket size={20} />
+              {items.length > 0 && <span className="absolute -right-2 -top-2 min-w-4 rounded-full bg-primary px-1 text-center text-[10px] text-primary-foreground">{items.length}</span>}
+            </Link>
             <ThemeToggle />
             <LanguageSwitcher />
           </nav>
@@ -104,6 +111,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                   {link.label}
                 </button>
               ))}
+              <Link href="/lista" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2 text-left text-muted-foreground hover:text-primary"><ShoppingBasket size={19} />{t("shoppingList")} {items.length > 0 && `(${items.length})`}</Link>
               <div className="flex items-center gap-2 pt-2 border-t border-border">
                 <ThemeToggle />
                 <LanguageSwitcher />

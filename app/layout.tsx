@@ -5,6 +5,7 @@ import localFont from "next/font/local"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
+import { ShoppingListProvider } from "@/contexts/shopping-list-context"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -51,7 +52,7 @@ export default function RootLayout({
         className={`${montserrat.variable} ${playfair.variable} ${bebas.variable} ${barlow.variable} font-montserrat`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider><ShoppingListProvider>{children}</ShoppingListProvider></LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

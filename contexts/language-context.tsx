@@ -186,6 +186,12 @@ const translations = {
     recipeLower: "receta", recipesLower: "recetas", previous: "Anterior", next: "Siguiente",
     back: "Volver", close: "Cerrar", minutes: "minutos", servings: "porciones",
     adjustQuantitiesFor: "Ajustá las cantidades para", decreaseServings: "Reducir porciones", increaseServings: "Aumentar porciones",
+    shoppingList: "Lista de compras", shoppingListDescription: "Coomi convierte lo que usa cada receta en presentaciones reales de compra y redondea siempre hacia arriba.",
+    addIngredientsToList: "Agregar ingredientes a la lista", addedToList: "Ingredientes agregados", backHome: "Volver al inicio",
+    addManualProduct: "Agregar un producto manualmente", product: "Producto", productPlaceholder: "Ej. Servilletas", quantity: "Cantidad", units: "unidades", add: "Agregar",
+    emptyList: "Tu lista está vacía", emptyListHint: "Agregá los ingredientes desde una receta o sumá un producto manualmente.", purchased: "comprados", removePurchased: "Eliminar comprados",
+    recipeUses: "La receta usa", presentation: "Presentación", purchaseQuantity: "Cantidad a comprar", decreaseQuantity: "Reducir cantidad", increaseQuantity: "Aumentar cantidad",
+    markPurchased: "Marcar como comprado", markPending: "Marcar como pendiente", remove: "Eliminar",
   },
   en: {
     // Navbar
@@ -304,6 +310,12 @@ const translations = {
     recipeLower: "recipe", recipesLower: "recipes", previous: "Previous", next: "Next",
     back: "Back", close: "Close", minutes: "minutes", servings: "servings",
     adjustQuantitiesFor: "Adjust quantities for", decreaseServings: "Decrease servings", increaseServings: "Increase servings",
+    shoppingList: "Shopping list", shoppingListDescription: "Coomi converts recipe amounts into real store packages and always rounds up.",
+    addIngredientsToList: "Add ingredients to list", addedToList: "Ingredients added", backHome: "Back to home",
+    addManualProduct: "Add a product manually", product: "Product", productPlaceholder: "E.g. Napkins", quantity: "Quantity", units: "units", add: "Add",
+    emptyList: "Your list is empty", emptyListHint: "Add ingredients from a recipe or enter a product manually.", purchased: "purchased", removePurchased: "Remove purchased",
+    recipeUses: "Recipe uses", presentation: "Package size", purchaseQuantity: "Quantity to buy", decreaseQuantity: "Decrease quantity", increaseQuantity: "Increase quantity",
+    markPurchased: "Mark as purchased", markPending: "Mark as pending", remove: "Remove",
   },
 }
 

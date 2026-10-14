@@ -3,10 +3,12 @@
 import { use, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { ArrowLeft, Clock, Users, Minus, Plus } from "lucide-react"
+import { ArrowLeft, Clock, Users, Minus, Plus, ShoppingBasket } from "lucide-react"
+import Link from "next/link"
 import { getRecipes } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
 import { notFound } from "next/navigation"
+import { useShoppingList } from "@/contexts/shopping-list-context"
 
 interface Props {
   params: Promise<{ id: string }>
@@ -16,6 +18,7 @@ export default function RecipePage({ params }: Props) {
   const { id } = use(params)
   const router = useRouter()
   const { language, t } = useLanguage()
+  const { addIngredients, items } = useShoppingList()
   const recipes = getRecipes(language)
   const recipe = recipes.find((r) => r.id === id)
 
@@ -23,8 +26,15 @@ export default function RecipePage({ params }: Props) {
 
   const [servings, setServings] = useState(recipe.servings)
   const [activeSection, setActiveSection] = useState<"ingredientes" | "preparacion">("ingredientes")
+  const [added, setAdded] = useState(false)
 
   const factor = servings / recipe.servings
+
+  const addRecipeToList = () => {
+    addIngredients(recipe.ingredients.map((ingredient) => ({ ...ingredient, quantity: ingredient.quantity * factor })))
+    setAdded(true)
+    window.setTimeout(() => setAdded(false), 2200)
+  }
 
   const formatQty = (qty: number, factor: number): string => {
     if (qty === 0) return ""
@@ -87,13 +97,10 @@ export default function RecipePage({ params }: Props) {
             <span className="hidden md:inline">{t("back")}</span>
           </button>
 
-          <button
-            onClick={() => router.back()}
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:border-white/50 transition-all md:flex hidden"
-            aria-label={t("close")}
-          >
-            ✕
-          </button>
+          <Link href="/lista" className="relative flex items-center gap-2 rounded-full border border-white/20 px-3 py-2 text-sm text-white/80 hover:border-white/50 hover:text-white" aria-label={t("shoppingList")}>
+            <ShoppingBasket size={18} /><span className="hidden sm:inline">{t("shoppingList")}</span>
+            {items.length > 0 && <span className="rounded-full bg-primary px-1.5 text-xs text-white">{items.length}</span>}
+          </Link>
         </div>
 
         {/* Hero: título + meta */}
@@ -254,6 +261,12 @@ export default function RecipePage({ params }: Props) {
                     </span>
                   </div>
                 ))}
+                <div className="md:col-span-2 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-end">
+                  {added && <span role="status" className="text-sm text-primary">{t("addedToList")}</span>}
+                  <button onClick={addRecipeToList} className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto">
+                    <ShoppingBasket size={18} />{t("addIngredientsToList")}
+                  </button>
+                </div>
               </motion.div>
             )}
 
