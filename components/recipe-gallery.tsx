@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useState, useCallback } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
-import { ChevronLeft, ChevronRight, Clock, Users } from "lucide-react"
+import { Clock, Leaf, Users } from "lucide-react"
 import Link from "next/link"
 import type { Recipe } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
@@ -15,6 +15,11 @@ interface RecipeGalleryProps {
 
 export default function RecipeGallery({ recipes }: RecipeGalleryProps) {
   const { t } = useLanguage()
+  const [veggieMode, setVeggieMode] = useState(false)
+
+  const visibleRecipes = veggieMode
+    ? recipes.filter((recipe) => recipe.tags?.some((tag) => ["vegetariano", "vegetarian"].includes(tag.toLocaleLowerCase())))
+    : recipes
 
   const categories = [
     { id: "salsas",      name: t("saucesCream") },
@@ -25,8 +30,30 @@ export default function RecipeGallery({ recipes }: RecipeGalleryProps) {
 
   return (
     <div className="space-y-16">
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card/60 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary" aria-hidden="true">
+            <Leaf size={20} />
+          </div>
+          <div>
+            <p className="font-medium text-foreground">{t("veggieMode")}</p>
+            <p className="text-sm text-muted-foreground">{t("veggieModeDescription")}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={veggieMode}
+          aria-label={t("veggieMode")}
+          onClick={() => setVeggieMode((enabled) => !enabled)}
+          className={`relative h-8 w-14 shrink-0 self-end rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:self-auto ${veggieMode ? "bg-primary" : "bg-muted"}`}
+        >
+          <span className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow-sm transition-transform ${veggieMode ? "translate-x-7" : "translate-x-1"}`} />
+        </button>
+      </div>
+
       {categories.map((category) => {
-        const categoryRecipes = recipes.filter((r) => r.categoryId === category.id)
+        const categoryRecipes = visibleRecipes.filter((r) => r.categoryId === category.id)
         if (categoryRecipes.length === 0) return null
         return (
           <CategoryRow
@@ -49,21 +76,8 @@ interface CategoryRowProps {
 
 function CategoryRow({ id, name, recipes }: CategoryRowProps) {
   const { t } = useLanguage()
-  const rowRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft,  setCanScrollLeft]  = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-
-  const updateScrollState = useCallback(() => {
-    const el = rowRef.current
-    if (!el) return
-    setCanScrollLeft(el.scrollLeft > 8)
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8)
-  }, [])
-
-  const scroll = (dir: "left" | "right") => {
-    rowRef.current?.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" })
-    setTimeout(updateScrollState, 350)
-  }
+  const [expanded, setExpanded] = useState(false)
+  const visibleRecipes = expanded ? recipes : recipes.slice(0, 6)
 
   return (
     <section id={id}>
@@ -90,62 +104,31 @@ function CategoryRow({ id, name, recipes }: CategoryRowProps) {
           </span>
         </motion.div>
 
-        <div className="flex gap-2">
+        {recipes.length > 6 && (
           <button
             type="button"
-            onClick={() => scroll("left")}
-            disabled={!canScrollLeft}
-            aria-label={`${t("previous")}: ${name}`}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+            onClick={() => setExpanded((value) => !value)}
+            aria-expanded={expanded}
+            aria-controls={`${id}-recipes`}
+            className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <ChevronLeft size={18} />
+            {expanded ? t("showLess") : t("viewAll")}
           </button>
-          <button
-            type="button"
-            onClick={() => scroll("right")}
-            disabled={!canScrollRight}
-            aria-label={`${t("next")}: ${name}`}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all disabled:opacity-20 disabled:cursor-not-allowed"
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
+        )}
       </div>
 
-      <div className="relative">
-        <div
-          className="absolute left-0 top-0 bottom-0 w-10 z-10 pointer-events-none transition-opacity duration-300"
-          style={{
-            background: "linear-gradient(to right, hsl(var(--background)), transparent)",
-            opacity: canScrollLeft ? 1 : 0,
-          }}
-        />
-        <div
-          className="absolute right-0 top-0 bottom-0 w-10 z-10 pointer-events-none transition-opacity duration-300"
-          style={{
-            background: "linear-gradient(to left, hsl(var(--background)), transparent)",
-            opacity: canScrollRight ? 1 : 0,
-          }}
-        />
-        <div
-          ref={rowRef}
-          onScroll={updateScrollState}
-          className="flex gap-4 overflow-x-auto pb-2"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {recipes.map((recipe, index) => (
+      <div id={`${id}-recipes`} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {visibleRecipes.map((recipe, index) => (
             <motion.div
               key={recipe.id}
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.07 }}
-              style={{ flexShrink: 0 }}
             >
               <RecipeCard recipe={recipe} />
             </motion.div>
           ))}
-        </div>
       </div>
     </section>
   )
@@ -156,7 +139,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { t } = useLanguage()
 
   return (
-    <div className="relative rounded-lg shadow-lg" style={{ width: 280, height: 200, flexShrink: 0 }}>
+    <div className="relative aspect-[7/5] w-full rounded-lg shadow-lg">
     <Link
       href={`/recetas/${recipe.id}`}
       aria-label={`${t("viewRecipe")}: ${recipe.name}`}

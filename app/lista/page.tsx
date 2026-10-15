@@ -8,11 +8,12 @@ import { useShoppingList } from "@/contexts/shopping-list-context"
 import LanguageSwitcher from "@/components/language-switcher"
 import ThemeToggle from "@/components/theme-toggle"
 import Logo from "@/components/logo"
+import { shoppingItemCopy } from "@/lib/shopping-list"
 
 const format = (value: number) => Number.isInteger(value) ? String(value) : value.toLocaleString(undefined, { maximumFractionDigits: 2 })
 
 export default function ShoppingListPage() {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   const { items, addManual, updateQuantity, toggleItem, removeItem, clearChecked } = useShoppingList()
   const [name, setName] = useState("")
   const [quantity, setQuantity] = useState(1)
@@ -40,12 +41,16 @@ export default function ShoppingListPage() {
         </form>
         {items.length === 0 ? <div className="rounded-3xl border border-dashed border-border px-6 py-16 text-center"><ShoppingBasket className="mx-auto mb-4 text-muted-foreground" size={42} /><h2 className="font-display text-2xl">{t("emptyList")}</h2><p className="mt-2 text-muted-foreground">{t("emptyListHint")}</p><Link href="/" className="mt-6 inline-block rounded-xl bg-primary px-5 py-3 font-medium text-primary-foreground">{t("exploreRecipes")}</Link></div> : (
           <div className="space-y-3"><div className="mb-4 flex items-center justify-between text-sm text-muted-foreground"><span>{checkedCount} / {items.length} {t("purchased")}</span>{checkedCount > 0 && <button onClick={clearChecked} className="hover:text-primary">{t("removePurchased")}</button>}</div>
-            {items.map((item) => <article key={item.id} className={`grid gap-4 rounded-2xl border border-border bg-card p-4 sm:grid-cols-[auto_1fr_auto_auto] sm:items-center ${item.checked ? "opacity-55" : ""}`}>
-              <button onClick={() => toggleItem(item.id)} className={`flex h-7 w-7 items-center justify-center rounded-lg border ${item.checked ? "border-primary bg-primary text-primary-foreground" : "border-input"}`} aria-label={`${item.checked ? t("markPending") : t("markPurchased")}: ${item.name}`}>{item.checked && <Check size={17} />}</button>
-              <div><h2 className={`font-medium ${item.checked ? "line-through" : ""}`}>{item.name}</h2>{item.source === "recipe" && <p className="mt-1 text-xs text-muted-foreground">{t("recipeUses")} {format(item.requiredQuantity)} {item.requiredUnit} · {t("presentation")} {format(item.presentationQuantity)} {item.presentationUnit}</p>}</div>
-              <div className="flex items-center gap-2" aria-label={`${t("purchaseQuantity")}: ${item.name}`}><button onClick={() => updateQuantity(item.id, item.purchaseQuantity - 1)} className="rounded-full border border-border p-2 hover:border-primary" aria-label={t("decreaseQuantity")}><Minus size={14} /></button><span className="min-w-24 text-center text-sm"><strong className="text-lg text-primary">{item.purchaseQuantity}</strong> {item.presentationLabel}{item.purchaseQuantity !== 1 ? "s" : ""}</span><button onClick={() => updateQuantity(item.id, item.purchaseQuantity + 1)} className="rounded-full border border-border p-2 hover:border-primary" aria-label={t("increaseQuantity")}><Plus size={14} /></button></div>
-              <button onClick={() => removeItem(item.id)} className="justify-self-end rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label={`${t("remove")}: ${item.name}`}><Trash2 size={18} /></button>
-            </article>)}
+            {items.map((item) => {
+              const acquired = item.purchaseQuantity * item.presentationQuantity
+              const excess = Math.max(0, acquired - item.requiredQuantity)
+              const copy = shoppingItemCopy(item, language)
+              return <article key={item.id} className={`grid gap-4 rounded-2xl border border-border bg-card p-4 sm:grid-cols-[auto_1fr_auto_auto] sm:items-center ${item.checked ? "opacity-55" : ""}`}>
+              <button onClick={() => toggleItem(item.id)} className={`flex h-7 w-7 items-center justify-center rounded-lg border ${item.checked ? "border-primary bg-primary text-primary-foreground" : "border-input"}`} aria-label={`${item.checked ? t("markPending") : t("markPurchased")}: ${copy.name}`}>{item.checked && <Check size={17} />}</button>
+              <div><h2 className={`font-medium ${item.checked ? "line-through" : ""}`}>{copy.name}</h2>{item.source === "recipe" && <div className="mt-1 space-y-0.5 text-xs text-muted-foreground"><p>{t("recipeUses")} {format(item.requiredQuantity)} {item.requiredUnit} · {t("presentation")} {format(item.presentationQuantity)} {item.presentationUnit}</p><p>{t("acquiredQuantity")}: {format(acquired)} {item.presentationUnit}{excess > 0 && <> · {t("estimatedExcess")}: {format(excess)} {item.presentationUnit}</>}</p></div>}</div>
+              <div className="flex items-center gap-2" aria-label={`${t("purchaseQuantity")}: ${copy.name}`}><button onClick={() => updateQuantity(item.id, item.purchaseQuantity - 1)} className="rounded-full border border-border p-2 hover:border-primary" aria-label={t("decreaseQuantity")}><Minus size={14} /></button><span className="min-w-24 text-center text-sm"><strong className="text-lg text-primary">{item.purchaseQuantity}</strong> × {copy.label}</span><button onClick={() => updateQuantity(item.id, item.purchaseQuantity + 1)} className="rounded-full border border-border p-2 hover:border-primary" aria-label={t("increaseQuantity")}><Plus size={14} /></button></div>
+              <button onClick={() => removeItem(item.id)} className="justify-self-end rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label={`${t("remove")}: ${copy.name}`}><Trash2 size={18} /></button>
+            </article>})}
           </div>
         )}
       </section>

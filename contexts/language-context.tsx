@@ -79,6 +79,10 @@ const translations = {
     about: "Sobre",
     exploreRecipes: "Explorar Recetas",
     searchByIngredients: "Buscar por Ingredientes",
+    veggieMode: "Modo veggie",
+    veggieModeDescription: "Mostrar solo recetas vegetarianas",
+    viewAll: "Ver todas",
+    showLess: "Ver menos",
 
     // Hero
     heroTitle: "Coomi",
@@ -191,6 +195,7 @@ const translations = {
     addManualProduct: "Agregar un producto manualmente", product: "Producto", productPlaceholder: "Ej. Servilletas", quantity: "Cantidad", units: "unidades", add: "Agregar",
     emptyList: "Tu lista está vacía", emptyListHint: "Agregá los ingredientes desde una receta o sumá un producto manualmente.", purchased: "comprados", removePurchased: "Eliminar comprados",
     recipeUses: "La receta usa", presentation: "Presentación", purchaseQuantity: "Cantidad a comprar", decreaseQuantity: "Reducir cantidad", increaseQuantity: "Aumentar cantidad",
+    acquiredQuantity: "Cantidad adquirida", estimatedExcess: "Excedente estimado",
     markPurchased: "Marcar como comprado", markPending: "Marcar como pendiente", remove: "Eliminar",
     savedRecipes: "Guardados", savedRecipesDescription: "Reuní tus recetas favoritas y organizalas en colecciones que quedan guardadas en este dispositivo.",
     favorites: "Favoritos", favorite: "Favorito", savedFavorite: "Guardada", addFavorite: "Agregar a favoritos", removeFavorite: "Quitar de favoritos",
@@ -208,6 +213,10 @@ const translations = {
     about: "About",
     exploreRecipes: "Explore Recipes",
     searchByIngredients: "Search by Ingredients",
+    veggieMode: "Veggie mode",
+    veggieModeDescription: "Show vegetarian recipes only",
+    viewAll: "View all",
+    showLess: "Show less",
 
     // Hero
     heroTitle: "Coomi",
@@ -320,6 +329,7 @@ const translations = {
     addManualProduct: "Add a product manually", product: "Product", productPlaceholder: "E.g. Napkins", quantity: "Quantity", units: "units", add: "Add",
     emptyList: "Your list is empty", emptyListHint: "Add ingredients from a recipe or enter a product manually.", purchased: "purchased", removePurchased: "Remove purchased",
     recipeUses: "Recipe uses", presentation: "Package size", purchaseQuantity: "Quantity to buy", decreaseQuantity: "Decrease quantity", increaseQuantity: "Increase quantity",
+    acquiredQuantity: "Amount acquired", estimatedExcess: "Estimated excess",
     markPurchased: "Mark as purchased", markPending: "Mark as pending", remove: "Remove",
     savedRecipes: "Saved", savedRecipesDescription: "Keep your favorite recipes together and organize them into collections stored on this device.",
     favorites: "Favorites", favorite: "Favorite", savedFavorite: "Saved", addFavorite: "Add to favorites", removeFavorite: "Remove from favorites",

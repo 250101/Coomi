@@ -8,7 +8,6 @@ import RecipeGallery from "@/components/recipe-gallery"
 import { getRecipes } from "@/data/recipes"
 import Footer from "@/components/footer"
 import SearchSection from "@/components/search-section"
-import VegetarianSection from "@/components/vegetarian-section"
 import TipsSection from "@/components/tips-section"
 import ForumSection from "@/components/forum-section"
 import AboutSection from "@/components/about-section"
@@ -80,7 +79,6 @@ export default function Home() {
           </AnimatePresence>
         </section>
 
-        <VegetarianSection recipes={recipes} />
         <TipsSection />
         <ForumSection />
         <AboutSection />

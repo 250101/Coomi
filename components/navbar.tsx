@@ -38,7 +38,6 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
   const navLinks = [
     { key: "browse", id: "recipes-section", label: t("explore"), tab: "browse" as const },
     { key: "search", id: "recipes-section", label: t("search"), tab: "search" as const },
-    { key: "vegetarian", id: "vegetarian", label: t("vegetarian") },
     { key: "tips", id: "tips", label: t("tips") },
     { key: "forum", id: "forum", label: t("forum") },
     { key: "about", id: "about", label: t("about") },

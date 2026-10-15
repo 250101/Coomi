@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useSyncExternalStore, type ReactNode } from "react"
 import { useLanguage } from "@/contexts/language-context"
-import { ingredientKey, loadShoppingList, saveShoppingList, toShoppingItem, type IngredientInput, type ShoppingItem } from "@/lib/shopping-list"
+import { loadShoppingList, normalizeIngredient, saveShoppingList, toShoppingItem, type IngredientInput, type ShoppingItem } from "@/lib/shopping-list"
 
 type ShoppingListContextType = {
   items: ShoppingItem[]; addIngredients: (ingredients: IngredientInput[]) => number
@@ -24,18 +24,23 @@ export function ShoppingListProvider({ children }: { children: ReactNode }) {
   const addIngredients = useCallback((ingredients: IngredientInput[]) => {
     const next = [...loadShoppingList()]
     for (const ingredient of ingredients) {
-      const key = ingredientKey(ingredient.name, ingredient.unit)
-      const index = next.findIndex((item) => item.key === key && item.requiredUnit === ingredient.unit)
+      const normalized = normalizeIngredient(ingredient)
+      if (!normalized) continue
+      const index = next.findIndex((item) => item.key === normalized.key)
       if (index >= 0) {
-        const requiredQuantity = next[index].requiredQuantity + ingredient.quantity
-        next[index] = { ...next[index], name: ingredient.name, requiredQuantity, checked: false,
+        const requiredQuantity = next[index].requiredQuantity + normalized.quantity
+        next[index] = { ...next[index], requiredQuantity, checked: false,
           purchaseQuantity: Math.max(1, Math.ceil(requiredQuantity / next[index].presentationQuantity)) }
-      } else next.push(toShoppingItem(ingredient, language))
+      } else {
+        const item = toShoppingItem(ingredient, language)
+        if (item) next.push(item)
+      }
     }
     commit(next); return ingredients.length
   }, [commit, language])
   const addManual = useCallback((name: string, quantity: number, unit: string) => {
     const item = toShoppingItem({ name, quantity, unit }, language, "manual")
+    if (!item) return
     item.purchaseQuantity = Math.max(1, Math.ceil(quantity)); item.requiredQuantity = quantity
     item.presentationQuantity = 1; item.presentationUnit = unit; item.presentationLabel = unit
     commit([...loadShoppingList(), item])
