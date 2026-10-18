@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
-import { Search, X, Clock, Users } from "lucide-react"
+import { Search, X, Clock, Users, Plus, ChefHat, CircleDashed } from "lucide-react"
 import { useRouter } from "next/navigation"
 import type { Recipe } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
@@ -47,6 +47,9 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
   const [hasSearched, setHasSearched]             = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
+
+  const readyRecipes = searchResults.filter((result) => result.missingIngredients.length === 0)
+  const almostReadyRecipes = searchResults.filter((result) => result.missingIngredients.length > 0)
 
   const allIngredients = Array.from(
     new Set(recipes.flatMap((r) => r.ingredients.map((i) => i.name.toLowerCase())))
@@ -117,6 +120,16 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
         {t("searchDescription")}
       </motion.p>
 
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{t("smartSearch")}</p>
+          <h3 className="mt-1 text-2xl font-display">{t("myPantry")}</h3>
+        </div>
+        <span className="rounded-full border border-border bg-card/70 px-3 py-1 text-xs text-muted-foreground">
+          {selectedIngredients.length} {t("selectedIngredients")}
+        </span>
+      </div>
+
       {/* Input */}
       <motion.div
         className="search-input-container"
@@ -135,7 +148,9 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
           }}
           onFocus={() => setShowSuggestions(searchTerm.length >= 2)}
         />
-        <span className="search-icon"><Search size={20} /></span>
+        <span className="search-icon">
+          {searchTerm.length > 0 ? <Search size={20} /> : <Plus size={20} />}
+        </span>
 
         {suggestions && filteredIngredients.length > 0 && (
           <div className="search-suggestions" style={{ display: "block" }}>
@@ -153,9 +168,10 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
         )}
       </motion.div>
 
-      {/* Tags seleccionados */}
-      {selectedIngredients.length > 0 && (
-        <motion.div className="selected-ingredients" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      {/* Despensa visual */}
+      <div className="mb-8 rounded-2xl border border-border bg-card/45 p-4 backdrop-blur-sm sm:p-5">
+        {selectedIngredients.length > 0 ? (
+          <motion.div className="selected-ingredients !mb-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           {selectedIngredients.map((ingredient, i) => (
             <motion.div
               key={i}
@@ -175,8 +191,11 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
               </button>
             </motion.div>
           ))}
-        </motion.div>
-      )}
+          </motion.div>
+        ) : (
+          <p className="text-sm text-muted-foreground">{t("emptyPantry")}</p>
+        )}
+      </div>
 
       {/* Botón buscar */}
       <motion.div
@@ -197,58 +216,41 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
       {/* Resultados */}
       {hasSearched && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h3 className="text-2xl font-display text-center mb-8">
-            {searchResults.length > 0
-              ? t("suggestionsFound").replace("{count}", searchResults.length.toString())
-              : t("noResults")}
-          </h3>
-
           {searchResults.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {searchResults.map(({ recipe, missingIngredients, coverage }, i) => (
-                <motion.div
-                  key={recipe.id}
-                  className="relative rounded-lg overflow-hidden cursor-pointer group"
-                  style={{ minHeight: 260 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                  onClick={() => router.push(`/recetas/${recipe.id}`)}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div
-                    className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-                    style={{
-                      backgroundImage: `url(${recipe.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
-                    <span className="rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                      {coverage}% {t("ingredientsAvailable")}
-                    </span>
-                    {missingIngredients.length === 0 && (
-                      <span className="rounded-full bg-primary px-3 py-1 text-xs font-medium text-white">{t("readyToCook")}</span>
-                    )}
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="text-white font-display text-lg mb-1">{recipe.name}</h3>
-                    <div className="flex gap-3 text-white/60 text-xs">
-                      <span className="flex items-center gap-1"><Clock size={11} />{recipe.time} min</span>
-                      <span className="flex items-center gap-1"><Users size={11} />{recipe.servings} {recipe.servingType || t("servings")}</span>
+            <div className="space-y-14">
+              {readyRecipes.length > 0 && (
+                <section aria-labelledby="ready-recipes-title">
+                  <div className="mb-6 flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white"><ChefHat size={20} /></span>
+                    <div>
+                      <h3 id="ready-recipes-title" className="text-2xl font-display">{t("youCanMake")}</h3>
+                      <p className="text-sm text-muted-foreground">{t("youCanMakeDescription")}</p>
                     </div>
-                    {missingIngredients.length > 0 && (
-                      <p className="mt-2 text-xs leading-relaxed text-white/80 line-clamp-2">
-                        <span className="font-medium text-white">{t("youStillNeed")}:</span>{" "}
-                        {missingIngredients.slice(0, 4).join(", ")}
-                        {missingIngredients.length > 4 ? ` +${missingIngredients.length - 4}` : ""}
-                      </p>
-                    )}
                   </div>
-                </motion.div>
-              ))}
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {readyRecipes.map((result, index) => (
+                      <RecipeResultCard key={result.recipe.id} result={result} index={index} t={t} onOpen={() => router.push(`/recetas/${result.recipe.id}`)} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {almostReadyRecipes.length > 0 && (
+                <section aria-labelledby="almost-recipes-title">
+                  <div className="mb-6 flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-full border border-primary/50 bg-primary/10 text-primary"><CircleDashed size={20} /></span>
+                    <div>
+                      <h3 id="almost-recipes-title" className="text-2xl font-display">{t("almostCanMake")}</h3>
+                      <p className="text-sm text-muted-foreground">{t("almostCanMakeDescription")}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {almostReadyRecipes.map((result, index) => (
+                      <RecipeResultCard key={result.recipe.id} result={result} index={index} t={t} onOpen={() => router.push(`/recetas/${result.recipe.id}`)} />
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
           ) : (
             <div className="bg-card p-12 rounded-lg text-center">
@@ -268,5 +270,61 @@ export default function SearchSection({ recipes }: SearchSectionProps) {
         </motion.div>
       )}
     </div>
+  )
+}
+
+function RecipeResultCard({
+  result,
+  index,
+  t,
+  onOpen,
+}: {
+  result: RecipeMatch
+  index: number
+  t: (key: string) => string
+  onOpen: () => void
+}) {
+  const { recipe, missingIngredients, coverage } = result
+  const isReady = missingIngredients.length === 0
+
+  return (
+    <motion.button
+      type="button"
+      className="group relative min-h-[280px] overflow-hidden rounded-2xl border border-border text-left shadow-lg shadow-black/10"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08 }}
+      onClick={onOpen}
+      whileHover={{ y: -4 }}
+    >
+      <div
+        className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
+        style={{ backgroundImage: `url(${recipe.image})`, backgroundSize: "cover", backgroundPosition: "center" }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/5" />
+      <div className="absolute left-3 right-3 top-3 flex items-start justify-between gap-2">
+        <span className="rounded-full bg-black/70 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
+          {coverage}% {t("available")}
+        </span>
+        {isReady && <span className="rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white">{t("readyToCook")}</span>}
+      </div>
+      <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+        <h4 className="mb-1 font-display text-xl">{recipe.name}</h4>
+        <div className="flex gap-3 text-xs text-white/65">
+          <span className="flex items-center gap-1"><Clock size={12} />{recipe.time} min</span>
+          <span className="flex items-center gap-1"><Users size={12} />{recipe.servings} {recipe.servingType || t("servings")}</span>
+        </div>
+        {!isReady && (
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/55 p-3 backdrop-blur-md">
+            <p className="mb-1 text-xs font-semibold text-primary">
+              {missingIngredients.length === 1 ? t("missingOneIngredient") : t("missingIngredientsCount").replace("{count}", String(missingIngredients.length))}
+            </p>
+            <p className="text-sm leading-relaxed text-white/85">
+              {missingIngredients.slice(0, 4).join(", ")}{missingIngredients.length > 4 ? ` +${missingIngredients.length - 4}` : ""}
+            </p>
+          </div>
+        )}
+      </div>
+    </motion.button>
   )
 }
