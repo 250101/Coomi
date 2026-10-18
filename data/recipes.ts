@@ -14,6 +14,15 @@ export interface Recipe {
     unit: string
   }[]
   steps: string[]
+  stepMedia?: Record<
+    number,
+    {
+      type: "image" | "video"
+      src: string
+      alt: string
+      poster?: string
+    }
+  >
 }
 
 export type LocalizedRecipe = Recipe
