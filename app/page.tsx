@@ -9,7 +9,7 @@ import { getRecipes } from "@/data/recipes"
 import Footer from "@/components/footer"
 import SearchSection from "@/components/search-section"
 import TipsSection from "@/components/tips-section"
-import ForumSection from "@/components/forum-section"
+import CommunityMapSection from "@/components/community-map-section"
 import AboutSection from "@/components/about-section"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -80,7 +80,7 @@ export default function Home() {
         </section>
 
         <TipsSection />
-        <ForumSection />
+        <CommunityMapSection />
         <AboutSection />
       </div>
 
