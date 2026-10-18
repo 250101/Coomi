@@ -11,6 +11,8 @@ import { useLanguage } from "@/contexts/language-context"
 import { notFound } from "next/navigation"
 import { useShoppingList } from "@/contexts/shopping-list-context"
 import SaveRecipeActions from "@/components/save-recipe-actions"
+import RecipeDietaryStatus from "@/components/recipe-dietary-status"
+import RecipeAdaptationPanel from "@/components/recipe-adaptation-panel"
 
 interface Props {
   params: Promise<{ id: string }>
@@ -162,6 +164,7 @@ export default function RecipePage({ params }: Props) {
               {recipe.servings} {recipe.servingType || t("servings")}
             </span>
           </motion.div>
+          <div className="mt-5"><RecipeDietaryStatus recipe={recipe} /></div>
         </div>
 
         {/* ── Panel principal ── */}
@@ -172,6 +175,8 @@ export default function RecipePage({ params }: Props) {
           transition={{ duration: 0.5, delay: 0.25 }}
         >
           <div className="max-w-5xl mx-auto">
+
+            <RecipeAdaptationPanel recipe={recipe} />
 
             {/* ── Calculadora de porciones ── */}
             <div className="mb-12 p-6 border border-border rounded-2xl">

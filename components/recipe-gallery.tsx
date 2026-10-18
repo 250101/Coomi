@@ -7,6 +7,8 @@ import Link from "next/link"
 import type { Recipe } from "@/data/recipes"
 import { useLanguage } from "@/contexts/language-context"
 import SaveRecipeActions from "@/components/save-recipe-actions"
+import DietaryPreferences from "@/components/dietary-preferences"
+import RecipeDietaryStatus from "@/components/recipe-dietary-status"
 
 interface RecipeGalleryProps {
   recipes: Recipe[]
@@ -30,6 +32,7 @@ export default function RecipeGallery({ recipes }: RecipeGalleryProps) {
 
   return (
     <div className="space-y-16">
+      <DietaryPreferences />
       <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card/60 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary" aria-hidden="true">
@@ -175,6 +178,10 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
           ))}
         </div>
       )}
+
+      <div className="absolute bottom-14 left-4 z-10">
+        <RecipeDietaryStatus recipe={recipe} compact />
+      </div>
 
       {/* Info base */}
       <div
