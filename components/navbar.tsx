@@ -39,7 +39,6 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
     { key: "browse", id: "recipes-section", label: t("explore"), tab: "browse" as const },
     { key: "search", id: "recipes-section", label: t("search"), tab: "search" as const },
     { key: "tips", id: "tips", label: t("tips") },
-    { key: "forum", id: "forum", label: t("forum") },
     { key: "about", id: "about", label: t("about") },
   ]
 
@@ -69,6 +68,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                 {link.label}
               </button>
             ))}
+            <Link href="/comunidad" className="text-muted-foreground transition-colors hover:text-primary">{t("forum")}</Link>
             <Link href="/guardados" className="text-muted-foreground transition-colors hover:text-primary" aria-label={t("savedRecipes")}><Heart size={20} /></Link>
             <Link href="/lista" className="relative text-muted-foreground transition-colors hover:text-primary" aria-label={t("shoppingList")}>
               <ShoppingBasket size={20} />
@@ -111,6 +111,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
                   {link.label}
                 </button>
               ))}
+              <Link href="/comunidad" onClick={() => setIsMenuOpen(false)} className="py-2 text-left text-muted-foreground hover:text-primary">{t("forum")}</Link>
               <Link href="/guardados" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2 text-left text-muted-foreground hover:text-primary"><Heart size={19} />{t("savedRecipes")}</Link>
               <Link href="/lista" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2 text-left text-muted-foreground hover:text-primary"><ShoppingBasket size={19} />{t("shoppingList")} {items.length > 0 && `(${items.length})`}</Link>
               <div className="flex items-center gap-2 pt-2 border-t border-border">
