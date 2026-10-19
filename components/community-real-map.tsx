@@ -50,8 +50,8 @@ export default function CommunityRealMap({ posts, language }: Props) {
         if (posts.length > 0) {
           const bounds = new google.maps.LatLngBounds()
           posts.forEach((post) => {
-            const position = { lat: post.latitude, lng: post.longitude }
-            new google.maps.Marker({ map: map.current, position, title: post.specialty })
+            const position = { lat: post.place.latitude, lng: post.place.longitude }
+            new google.maps.Marker({ map: map.current, position, title: post.subject })
             bounds.extend(position)
           })
           map.current.fitBounds(bounds)
